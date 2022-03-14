@@ -14,6 +14,9 @@ export class ApiTransformInterceptor implements NestInterceptor {
     const request: Request = context.switchToHttp().getRequest<Request>();
     return next.handle().pipe(
       map((data) => {
+        data.path = request.url;
+        data.method = request.method;
+        data.timestamp = new Date().toLocaleDateString() + '' + new Date().toLocaleTimeString();
         const keep = this.reflector.get<boolean>(TRANSFORM_KEEP_KEY_METADATA, context.getHandler());
         if (keep) {
           return data;
