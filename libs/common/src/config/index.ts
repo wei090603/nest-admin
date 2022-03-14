@@ -8,7 +8,7 @@ import * as yaml from 'js-yaml';
 import { join } from 'path';
 
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV || 'development'
 
 const configFileNameObj = {
   development :'development.yml',

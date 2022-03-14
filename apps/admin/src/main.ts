@@ -44,7 +44,7 @@ async function bootstrap() {
 
   const { adminPort } = config.get('http');
   await app.listen(adminPort);
-  Logger.log(`http://localhost:${3000}/swagger`,'服务器启动成功');
+  Logger.log(`http://localhost:${adminPort}/swagger`,'服务器启动成功');
 }
 
 bootstrap();

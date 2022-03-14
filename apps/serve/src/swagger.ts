@@ -5,8 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 export function setupSwagger(app: INestApplication): void {
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('后台管理系统')
-    .setDescription('后台管理系统API接口文档')
+    .setTitle('前台管理系统')
+    .setDescription('前台管理系统API接口文档')
     .setVersion('1.0')
     .addTag('api')
     .addBearerAuth()
