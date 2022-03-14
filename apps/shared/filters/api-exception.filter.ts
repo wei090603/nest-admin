@@ -46,7 +46,11 @@ export class ApiExceptionFilter implements ExceptionFilter {
     if (status >= 500) {
       Logger.error(exception, ApiExceptionFilter.name);
     }
-    const result = new ResultData(code, null, message);
+
+    const path = request.url;
+    const method  = request.method;
+    const timestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+    const result = new ResultData(code, path, method, timestamp, null, message);
     console.log(result, 'result');
     response.status(status).send(result);
   }
