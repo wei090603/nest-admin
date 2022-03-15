@@ -39,7 +39,7 @@ export class Advertise extends Base {
   @Column({
     type: 'boolean',
     name: 'status',
-    comment: '是否置顶 0-隐藏 1-显示',
+    comment: '状态 0-隐藏 1-显示',
     default: true,
   })
   public status: boolean;

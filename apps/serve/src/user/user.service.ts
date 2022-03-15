@@ -4,8 +4,7 @@
  * @Date: 2021-09-18 16:27:24
  */
 import { BadRequestException, CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto, RegisterCode } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, RegisterCode, UpdateUserDto } from './type';
 import { User } from '@libs/db/entity/user.entity';
 import { getRepository, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
