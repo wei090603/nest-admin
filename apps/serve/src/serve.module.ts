@@ -5,13 +5,15 @@ import { CommonModule } from '@libs/common/common.module';
 import { UserModule } from './user/user.module';
 import { AdvertiseModule } from './advertise/advertise.module';
 import { CategoryModule } from './category/category.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
     CommonModule,
     UserModule,
     AdvertiseModule,
-    CategoryModule, 
+    CategoryModule,
+    TagModule, 
   ],
   controllers: [ServeController],
   providers: [ServeService],

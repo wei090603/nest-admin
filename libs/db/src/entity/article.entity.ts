@@ -84,6 +84,6 @@ export class Article extends Base {
   // public comment: Comment[];
 
   @ManyToOne(() => User, user => user.article)
-  @JoinColumn({name: 'user_id'})
+  @JoinColumn({name: 'author_id'})
   public author: User;
 }

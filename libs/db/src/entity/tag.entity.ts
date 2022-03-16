@@ -19,11 +19,11 @@ export class Tag extends Base {
 	@JoinTable({
     name: "tags_articles", 
     joinColumn: {
-      name: "article_id",
+      name: "tag_id",
       referencedColumnName: "id"
     },
     inverseJoinColumn: {
-      name: "tag_id",
+      name: "article_id",
       referencedColumnName: "id"
     }
   }) // 可以手动指定中间表明
