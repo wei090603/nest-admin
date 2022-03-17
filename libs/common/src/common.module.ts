@@ -1,8 +1,3 @@
-/*
- * @Description:
- * @Author: tao.wei
- * @Date: 2021-09-09 09:32:09
- */
 import { Global, Module, CacheModule } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
