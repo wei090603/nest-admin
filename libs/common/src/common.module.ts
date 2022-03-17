@@ -37,7 +37,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
     MulterModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         storage: diskStorage({
-          destination: path.join(__dirname, './uploads'),
+          destination: path.join(process.cwd(), './uploads'),
           filename: (req, file, cb) => {
             // 在此处自定义保存后的文件名称
             const filename = `${Date.now() + Math.round(Math.random() * 1e9)}.${file.mimetype.split('/')[1]}`;

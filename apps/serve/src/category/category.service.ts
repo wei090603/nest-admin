@@ -13,6 +13,7 @@ export class CategoryService {
   async findAll(): Promise<Category[]>  {
     return await this.categoryRepository.find({
       select: ['id', 'title'],
+      where: { parent: null },
       order: { id: 'DESC' },
     })
   }

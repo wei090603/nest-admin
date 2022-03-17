@@ -1,4 +1,4 @@
-import { Entity, Column, TreeChildren, TreeParent, OneToMany, ManyToOne, Tree } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Article } from './article.entity';
 import { Base } from './base.entity';
 
@@ -13,21 +13,22 @@ export class Category extends Base {
   })
   public title: string;
 
-  // @Column({
-  //   type: 'int',
-  //   nullable: true,
-  //   name: 'count',
-  //   default: 0,
-  //   comment: '子级数量'
-  // })
-  // public count: number;
+  @Column({
+    type: 'int',
+    name: 'grade',
+    comment: '数级',
+    default: 0,
+  })
+  public grade: number
 
-  @OneToMany(() => Article, (article) => article.category)
+  @ManyToOne(() => Category, category => category.children)
+  @JoinColumn({name: 'parent_id'})
+  public parent: Category;
+
+  @OneToMany(() => Category, category => category.parent)
+  public children: Category[];
+
+  @OneToMany(() => Article, article => article.category)
   public article: Article[];
 
-  // @TreeChildren({ cascade: true })
-  // public children: Category[];
-
-  // @TreeParent()
-  // public parent: Category;
 }

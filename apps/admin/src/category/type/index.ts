@@ -1,8 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min } from "class-validator";
 import { PageOptionsDto } from "apps/shared/dto/page.dto";
 
 export class CategoryInfo {
+  @ApiProperty({
+    description: '父级ID',
+    example: 0
+  })
+  @IsInt()
+  @Min(0)
+  readonly parentId: number;
+
+  @ApiProperty({
+    description: '级数',
+    example: 0
+  })
+  @IsInt()
+  @Min(0)
+  readonly grade: number;
+
   @ApiProperty({
     description: '分类名',
     uniqueItems: true,
@@ -22,7 +38,7 @@ export class FindCategoryDto extends PageOptionsDto {
     required: false,
   })
   @IsOptional()
-  readonly name: string;
+  readonly title: string;
 }
 
 

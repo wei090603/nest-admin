@@ -13,6 +13,7 @@ import { MenuModule } from './menu/menu.module';
 import { LinksModule } from './links/links.module';
 import { LoginLoggerModule } from './login-logger/login-logger.module';
 import { NoticeModule } from './notice/notice.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { NoticeModule } from './notice/notice.module';
     MenuModule,
     LinksModule,
     LoginLoggerModule,
-    NoticeModule
+    NoticeModule,
+    UploadModule
   ],
   controllers: [AppController],
   providers: [AppService],

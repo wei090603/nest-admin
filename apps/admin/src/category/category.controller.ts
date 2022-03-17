@@ -11,7 +11,7 @@ export class CategoryController {
 
   @Get()
   @ApiOkResponse({ type: [PageCategoryList] })
-  @ApiOperation({ summary: '获取标签列表' })
+  @ApiOperation({ summary: '获取分类列表' })
   async findAll(@Query() query: FindCategoryDto) {
     return await this.categoryService.findAll(query);
   }
@@ -24,19 +24,19 @@ export class CategoryController {
   }
 
   @Post()
-  @ApiOperation({ summary: '添加标签' })
+  @ApiOperation({ summary: '添加分类' })
   async register(@Body() data: CategoryInfo) {
     return this.categoryService.create(data);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: '修改标签信息' })
+  @ApiOperation({ summary: '修改分类信息' })
   async update(@Param('id') id: string, @Body() data: CategoryInfo) {
     return await this.categoryService.update(+id, data);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: '删除标签', description: '删除标签' })
+  @ApiOperation({ summary: '删除分类', description: '删除分类' })
   async remove(@Param('id') id: string) {
     return await this.categoryService.remove(+id);
   }

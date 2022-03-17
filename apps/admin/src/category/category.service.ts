@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '@libs/db/entity/category.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CategoryInfo, FindCategoryDto } from './type';
 import { PageResult } from 'apps/shared/dto/page.dto';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
@@ -14,11 +14,13 @@ export class CategoryService {
   ) {}
 
   async findAll({ page = 1, limit = 10, ...params }: FindCategoryDto) : Promise<PageResult<Category>> {
+    const { title } = params
     const [list, total] = await this.categoryRepository.findAndCount({
+      relations: ['children'],
       skip: limit * (page - 1),
       take: limit,
-      where: params,
-      order: { id: 'DESC' },
+      where: { title: Like(`%${title ?? ''}%`), parent: null },
+      order: { id: 'ASC' },
     });
     return { list, total };
   }
@@ -26,15 +28,16 @@ export class CategoryService {
   async list(): Promise<Category[]>  {
     return await this.categoryRepository.find({
       select: ['id', 'title'],
-      order: { id: 'DESC' },
+      order: { id: 'ASC' },
     })
   }
 
   async create(data: CategoryInfo) {
-    const { title } = data
-    const existing = await this.categoryRepository.findOne({ title });;
+    const { title, parentId, grade } = data
+    const existing = await this.categoryRepository.findOne({ title });
     if (existing) throw new ApiException(10400, '分类名已存在');
-    await this.categoryRepository.insert({ title });
+    const parent = await this.categoryRepository.findOne({ id: parentId })
+    await this.categoryRepository.insert({ title, parent, grade });
   }
 
   async update(id: number, data: CategoryInfo) {

@@ -23,13 +23,13 @@ export class TagService {
 
   async findHot(): Promise<Tag[]> {
     return await getManager().createQueryBuilder(Tag, 'tag')
-    .innerJoinAndSelect("tag.article", "article")
-    .select("Count(tag.id)", "count")
-    .addSelect('tag.id', 'id')
-    .addSelect('tag.name', 'name')
-    .groupBy('tag.id')
-    .orderBy('count', 'DESC')
-    .take(10)
-    .getRawMany()
+      .innerJoinAndSelect("tag.article", "article")
+      .select("Count(tag.id)", "count")
+      .addSelect('tag.id', 'id')
+      .addSelect('tag.name', 'name')
+      .groupBy('tag.id')
+      .orderBy('count', 'DESC')
+      .take(10)
+      .getRawMany()
   }
 }
