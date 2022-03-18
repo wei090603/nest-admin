@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PageResult } from 'apps/shared/dto/page.dto';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { FindTagDto, TagInfo } from './dto';
 import { Tag } from '@libs/db/entity/tag.entity';
 
@@ -15,10 +15,11 @@ export class TagService {
   ) {}
 
   async findAll({ page = 1, limit = 10, ...params }: FindTagDto) : Promise<PageResult<Tag>> {
+    const { name } = params
     const [list, total] = await this.tagRepository.findAndCount({
       skip: limit * (page - 1),
       take: limit,
-      where: params,
+      where: { name: Like(`%${name}%`) },
       order: { id: 'DESC' },
     });
     return { list, total };

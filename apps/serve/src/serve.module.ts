@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { AdvertiseModule } from './advertise/advertise.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
+import { ArticleModule } from './article/article.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +15,9 @@ import { TagModule } from './tag/tag.module';
     UserModule,
     AdvertiseModule,
     CategoryModule,
-    TagModule, 
+    TagModule,
+    ArticleModule,
+    AuthModule, 
   ],
   controllers: [ServeController],
   providers: [ServeService],

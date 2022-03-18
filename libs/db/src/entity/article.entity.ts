@@ -14,6 +14,23 @@ export class Article extends Base {
   public content: string;
 
   @Column({
+    type: 'varchar',
+    name: 'title',
+    nullable: true,
+    comment: '文章标题',
+  })
+  public title: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'images',
+    nullable: true,
+    length: 500,
+    comment: '文章图片',
+  })
+  public images: string;
+
+  @Column({
     type: 'int',
     name: 'reads',
     default: 0,

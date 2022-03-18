@@ -13,7 +13,7 @@ db:
     logging: ['error']
     synchronize: true
     timezone: '+08:00'
-    cache: { duration: 60000 }
+    cache: { duration: 0 }
 # CACHE REDIS
 redis:
   host: 139.155.172.199
