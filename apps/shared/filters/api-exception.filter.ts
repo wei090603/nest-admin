@@ -14,7 +14,7 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 /**
  * 异常接管，统一异常返回数据
  */
-@Catch(HttpException)
+@Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
   constructor() {}
 
@@ -40,7 +40,6 @@ export class ApiExceptionFilter implements ExceptionFilter {
     if (isDev || status < 500) {
       message =
         exception instanceof HttpException ? exception.message : `${exception}`;
-        console.log(message, 'message');
     }
     // 记录 500 日志
     if (status >= 500) {
