@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Advertise } from '@libs/db/entity/advertise.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { AdvertiseInfo, FindAdvertiseDto } from './dto';
 import { PageResult } from 'apps/shared/dto/page.dto';
 
@@ -13,10 +13,11 @@ export class AdvertiseService {
   ) {}
 
   async findAll({ page = 1, limit = 10, ...params }: FindAdvertiseDto) : Promise<PageResult<Advertise>> {
+    const { title, type } = params
     const [list, total] = await this.advertiseRepository.findAndCount({
       skip: limit * (page - 1),
       take: limit,
-      where: params,
+      where: { title: Like(`%${title}%`), type: Like(`%${type}%`) },
       order: { id: 'DESC' },
     });
     return { list, total };

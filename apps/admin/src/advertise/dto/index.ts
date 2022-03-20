@@ -58,5 +58,6 @@ export class FindAdvertiseDto extends PageOptionsDto {
     required: false,
     example: ''
   })
+  @IsOptional()
   readonly type: AdvertiseType;
 }
