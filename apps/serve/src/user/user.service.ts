@@ -11,6 +11,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { hashSync } from 'bcryptjs';
 import { EmailService } from '@libs/email';
 import { Article } from '@libs/db/entity/article.entity';
+import { Cache } from 'cache-manager'
+import { ApiException } from 'apps/shared/exceptions/api.exception';
 
 @Injectable()
 export class UserService {
@@ -18,14 +20,28 @@ export class UserService {
     @InjectRepository(User) private readonly repository: Repository<User>,
     @InjectRepository(Article) private readonly articleRepository: Repository<Article>,
     private readonly emailService: EmailService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-  async create({email, code, password}: CreateUserDto) {
+  async create(data: CreateUserDto) {
+    const { email, code, password } = data
     // 检查用户名是否存在
     const existing = await this.repository.findOne({ email });
-    if (existing) {
-      throw new HttpException('用户已存在', HttpStatus.BAD_REQUEST);
-    }
+    if (existing) throw new ApiException(10400, '该用户已注册');
+    const value = await this.cacheManager.get(email);
+    if (code !== value) throw new ApiException(10400, '验证码错误');
+    await this.repository.insert({ email, password: hashSync(password) })
+  }
+
+  // 根据用户id获取用户文章列表
+  async getArticle(user: User): Promise<Article[]> {
+    return await this.articleRepository.find({
+      relations: ['tag'],
+      where: { author: user },
+      order: {
+        id: 'DESC'
+      }
+    })
   }
 
   findAll() {
@@ -52,11 +68,10 @@ export class UserService {
 
   async registerCode({ email }: RegisterCode) {
     await this.emailService.sendEmail(email, '倾说：邮箱注册验证码', 'code')
-    return ''
   }
 
   // 修改用户信息
-  async update(user: User, dto: UpdateUserDto): Promise<null> {
+  async update(user: User, dto: UpdateUserDto) {
     user.avatar = dto.avatar
     user.age = dto.age
     user.position = dto.position
@@ -64,7 +79,6 @@ export class UserService {
     user.sex = dto.sex
     user.nickName = dto.nickName
     await this.repository.save(user)
-    return null
   }
 
 }

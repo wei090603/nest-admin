@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Request, Req, Get } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Request, Req, Get, Inject, CACHE_MANAGER } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Manager } from '@libs/db/entity/manager.entity';
@@ -7,11 +7,16 @@ import { LoginDto } from './dto';
 import { Token } from './dto/response';
 import { Public } from 'apps/shared/guards/constants';
 import { user } from 'apps/shared/decorators/user.decorator';
+import { JwtAuthGuard } from 'apps/shared/guards/guard.strategy';
+import { Cache } from 'cache-manager'
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
   
   @Post('login')
   @Public()
@@ -27,6 +32,14 @@ export class AuthController {
   @ApiBearerAuth() // 此接口需要传递token;
   userInfo(@user() userInfo: Manager) {
     return userInfo;
+  }
+
+  @Get('loginOut')
+  @ApiOperation({ summary: '退出登录' })
+  // 此接口需要传递token;
+  @ApiBearerAuth()
+  async loginOut(@user() user: Manager) {
+    await this.cacheManager.del(user.id.toString());
   }
   
 }

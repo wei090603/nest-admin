@@ -44,7 +44,7 @@ export class Article extends Base {
     comment: '是否回复 1-打开回复 2-关闭回复 3-仅自己可见',
     default: 1,
   })
-  public status: string;
+  public status: number;
 
   @Column({
     type: 'boolean',

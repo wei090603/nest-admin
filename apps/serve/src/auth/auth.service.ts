@@ -4,14 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
 import { getRepository, Repository } from 'typeorm';
 import { User } from '@libs/db/entity/user.entity';
-// import { Cache } from 'cache-manager'
+import { Cache } from 'cache-manager'
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
     private readonly jwtService: JwtService,
-    // @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -63,14 +63,12 @@ export class AuthService {
    * @return {*}
    */
   async findMe(id: number): Promise<User> {
-    let userInfo: User
-    // userInfo = await this.cacheManager.get(id.toString());
-    if (!userInfo) {
-      userInfo = await this.repository.findOne(id, {
-        relations: ['userTag'],
-      });
-    //   await this.cacheManager.set(id.toString(), userInfo, { ttl: 7200 });
-    }
-    return userInfo
+    const userInfo: User = await this.cacheManager.get(id.toString());
+    if (userInfo) return userInfo
+    const user = await this.repository.findOne(id, {
+      // relations: ['userTag'],
+    });
+    await this.cacheManager.set(id.toString(), user, { ttl: 7200 });
+    return user;
   }
 }

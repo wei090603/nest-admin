@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manager } from '@libs/db/entity/manager.entity';
 import { getManager, Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginLogger } from '@libs/db/entity/loginLogger.entity';
 import { IptoaddressService } from '@libs/iptoaddress';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
+import { Cache } from 'cache-manager'
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     private readonly loginLoggerRepository: Repository<LoginLogger>,
     private readonly jwtService: JwtService,
     private readonly iptoaddressService: IptoaddressService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   
   public async login(manager: Manager, ip: string): Promise<{token: string}> {
@@ -42,8 +44,14 @@ export class AuthService {
   }
 
   async findMe(id: number): Promise<Manager> {
-    return await this.authRepository.findOne(id, {
-      relations: ['roles'],
-    });
+    let userInfo: Manager
+    userInfo = await this.cacheManager.get(id.toString());
+    if (!userInfo) {
+      userInfo = await this.authRepository.findOne(id, {
+        relations: ['roles'],
+      });
+      this.cacheManager.set(id.toString(), userInfo, { ttl: 7200 });
+    }
+    return userInfo;
   }
 }

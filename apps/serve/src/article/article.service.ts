@@ -2,10 +2,10 @@ import { Article } from '@libs/db/entity/article.entity';
 import { Category } from '@libs/db/entity/category.entity';
 import { Tag } from '@libs/db/entity/tag.entity';
 import { User } from '@libs/db/entity/user.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PageResult } from 'apps/shared/dto/page.dto';
-import { getManager, Like, Repository } from 'typeorm';
+import { getManager, In, Like, Repository } from 'typeorm';
 import { CreateArticleDto, FindArticleDto, SearchArticleDto } from './type';
 
 @Injectable()
@@ -37,22 +37,33 @@ export class ArticleService {
 
   async findAll({ page = 1, limit = 10, ...params }: FindArticleDto, user: User): Promise<{ list: Article[], total: number }>{
     const { categoryId } = params
-    // const category = categoryId ? await this.categoryRepository.findOne(categoryId) : ''
-    // const [list, total] = await this.articleRepository.findAndCount({
-    //   relations: ['author', 'tag'],
-    //   skip: limit * (page - 1),
-    //   take: limit,
-    //   order: { id: 'DESC' },
-    // })
-    const [list, total] = await getManager().createQueryBuilder(Article, "article")
+    const ids: number[] = []
+
+    if (categoryId) {
+      const { id } = await this.categoryRepository.createQueryBuilder('category')
+      .leftJoinAndSelect("category.children", "children")
+      .select("GROUP_CONCAT(category.id)", "id")
+      .select("GROUP_CONCAT(children.id)", "id")
+      .where("category.id = :id", { id: categoryId })
+      .getRawOne()
+      ids.push(id)
+    }
+    const qb = this.articleRepository.createQueryBuilder("article");
+    ids.length === 0 ? qb: qb.where({ category: In(ids) })
+
+    const [list, total] = await qb
     .leftJoinAndSelect('article.author', 'author') // 注意这里
     .leftJoinAndSelect('article.tag', 'tag') // 注意这里
+    .leftJoinAndSelect('article.category', 'category')
     .select('article')
     .addSelect('author.id')
     .addSelect('author.nickName') // 和这里
     .addSelect('author.avatar') // 和这里
+    .addSelect('tag.id')
     .addSelect('tag.name')
-    .where(params)
+    .addSelect('category.id')
+    .addSelect('category.title')
+    .orderBy('article.id', 'DESC')
     .skip(limit * (page - 1))
     .take(limit)
     .getManyAndCount();

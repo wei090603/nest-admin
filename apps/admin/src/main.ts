@@ -1,12 +1,13 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './swagger';
 import { ApiExceptionFilter } from 'apps/shared/filters/api-exception.filter';
 import { ApiTransformInterceptor } from 'apps/shared/interceptor/api-interceptor';
 import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from 'apps/shared/pipes/validation.pipe';
+import { Logger } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -35,7 +36,7 @@ async function bootstrap() {
   // app.useLogger(app.get(Logger));
   // 异常接管，统一异常返回数据
   app.useGlobalFilters(new ApiExceptionFilter());
-  // // 统一处理返回接口结果，如果不需要则添加
+  // 统一处理返回接口结果，如果不需要则添加
   app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()));
   // 设置一个全局作用域的管道
   app.useGlobalPipes(new ValidationPipe());

@@ -24,7 +24,7 @@ export class CreateUserDto extends RegisterCode {
     description: '密码',
   })
   @MinLength(6, { message: '密码至少六位' })
-  @IsString({ message: '密码不是有效的数据' })
+  @IsString({ message: '密码数据格式错误' })
   @IsNotEmpty({ message: '密码不能为空' })
   readonly password: string;
 
@@ -32,10 +32,9 @@ export class CreateUserDto extends RegisterCode {
     description: '验证码',
   })
   @IsNotEmpty({ message: '验证码不能为空' })
+  @IsString({ message: '密码数据格式错误' })
   readonly code: string;
 }
-
-
 
 export class UpdateUserDto {
   

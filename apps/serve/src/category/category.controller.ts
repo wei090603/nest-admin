@@ -16,4 +16,11 @@ export class CategoryController {
     return await this.categoryService.findAll();
   }
 
+  @Get('top')
+  @ApiOkResponse({ type: CategoryList })
+  @ApiOperation({ summary: '获取一级分类列表' })
+  async findTop() {
+    return await this.categoryService.findTop();
+  }
+
 }

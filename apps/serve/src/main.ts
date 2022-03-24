@@ -1,12 +1,13 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { setupSwagger } from './swagger';
 import { ApiExceptionFilter } from 'apps/shared/filters/api-exception.filter';
 import { ApiTransformInterceptor } from 'apps/shared/interceptor/api-interceptor';
 import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
 import { ServeModule } from './serve.module';
+import { ValidationPipe } from 'apps/shared/pipes/validation.pipe';
 
 
 async function bootstrap() {

@@ -12,6 +12,7 @@ import { diskStorage } from 'multer';
 import { IptoaddressModule } from '@libs/iptoaddress';
 import { EmailModule } from '@libs/email';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Global()
 @Module({
@@ -27,6 +28,13 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
     PassportModule.register({ defaultStrategy: 'JWT' }),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => configService.get('jwt'),
+      inject: [ConfigService],
+    }),
+    CacheModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        ...configService.get('redis')
+      }),
       inject: [ConfigService],
     }),
     MulterModule.registerAsync({
@@ -69,7 +77,8 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
             from,
           },
           template: {
-            dir: path.join(__dirname, './template'),
+            // dir: path.join(__dirname, './template'),
+            dir: path.join(process.cwd(), './template'),
             adapter: new EjsAdapter(),
             options: {
               strict: true
@@ -83,7 +92,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
     EmailModule
   ],
   providers: [CommonService],
-  exports: [CommonService, JwtModule, MulterModule, IptoaddressModule, EmailModule],
+  exports: [CommonService, JwtModule, CacheModule, MulterModule, IptoaddressModule, EmailModule],
 })
 
 export class CommonModule {}

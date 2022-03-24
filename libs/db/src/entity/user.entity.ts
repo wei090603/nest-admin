@@ -102,6 +102,14 @@ export class User extends Base {
   })
   public location: string;
 
+  @Column('varchar', {
+    nullable: true,
+    length: 100,
+    name: 'sign',
+    comment: '个性签名',
+  })
+  public sign: string;
+
   @Column('boolean', {
     name: 'vip',
     comment: '是否会员',
@@ -111,7 +119,7 @@ export class User extends Base {
 
   @Column('varchar', {
     length: 200,
-    default: '',
+    default: 'default_avatar.png',
     name: 'avatar',
     comment: '头像地址',
   })

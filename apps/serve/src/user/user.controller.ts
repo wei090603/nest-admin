@@ -22,20 +22,20 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Post('registerCode')
+  @Post('code')
   @ApiOperation({ summary: '注册获取验证码', description: '注册获取验证码' })
   registerCode(@Body() registerCode: RegisterCode) {
     return this.userService.registerCode(registerCode);
   }
 
-  // @Get('article')
-  // @ApiOperation({ description: '获取当前用户标签', summary: '获取当前用户标签' })
-  // // 此接口需要传递token;
-  // @ApiBearerAuth()
-  // @UseGuards(JwtAuthGuard)
-  // getArticle(@user() user: User) {
-  //   return this.userService.getArticle(user);
-  // }
+  @Get('article')
+  @ApiOperation({ description: '获取当前用户文章', summary: '获取当前用户文章' })
+  // 此接口需要传递token;
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  getArticle(@user() user: User) {
+    return this.userService.getArticle(user);
+  }
 
   // @Get('tag')
   // @ApiOperation({ description: '获取当前用户标签', summary: '获取当前用户标签' })

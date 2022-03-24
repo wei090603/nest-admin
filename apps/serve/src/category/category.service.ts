@@ -10,11 +10,20 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async findAll(): Promise<Category[]>  {
+  async findTop(): Promise<Category[]>  {
     return await this.categoryRepository.find({
       select: ['id', 'title'],
       where: { parent: null },
       order: { id: 'DESC' },
+    })
+  }
+
+  async findAll(): Promise<Category[]> {
+    return await this.categoryRepository.find({
+      relations: ['children'],
+      select: ['id', 'title'],
+      where: { parent: null },
+      order: { id: 'ASC' },
     })
   }
 }
