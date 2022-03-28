@@ -5,7 +5,13 @@
   "root": "apps/admin",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/admin/tsconfig.app.json"
+    "tsConfigPath": "apps/admin/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "./secrets",
+        "outDir": ""
+      }
+    ]
   },
   "projects": {
     "admin": {
