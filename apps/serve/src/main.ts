@@ -8,21 +8,11 @@ import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
 import { ServeModule } from './serve.module';
 import { ValidationPipe } from 'apps/shared/pipes/validation.pipe';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
-import * as express from 'express';
-import { join } from 'path';
 
-const httpsOptions = {
-  key: fs.readFileSync(join(__dirname, './secrets/lhapi.tobtt.cn.key')),
-  cert: fs.readFileSync(join(__dirname, './secrets/lhapi.tobtt.cn.pem'))
-}
 
 async function bootstrap() {
-  const server = express();
   // 设置cors允许跨域访问
-  const app = await NestFactory.create<NestExpressApplication>(ServeModule, new ExpressAdapter(server), {
+  const app = await NestFactory.create<NestExpressApplication>(ServeModule, {
     cors: true,
     bufferLogs: true,
     logger: ['log', 'error', 'warn'],
@@ -53,11 +43,9 @@ async function bootstrap() {
   setupSwagger(app);
 
   const { servePort } = config.get('http');
-  await app.init();
+  await app.listen(servePort)
 
-  http.createServer(server).listen(servePort);
-  https.createServer(httpsOptions, server).listen(443);
-  Logger.log(`https://localhost:${servePort}/swagger`,'服务器启动成功');
+  Logger.log(`http://localhost:${servePort}/swagger`,'服务器启动成功');
 }
 
 bootstrap();
