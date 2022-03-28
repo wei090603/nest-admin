@@ -5,6 +5,7 @@
  */
 import { Entity, Column, OneToMany, JoinColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
 import { Article } from './article.entity';
+import { ArticleLike } from './articleLike.entity';
 import { Base } from './base.entity';
 
 @Entity('user')
@@ -134,5 +135,9 @@ export class User extends Base {
 
   @OneToMany(() => Article, article => article.author)
   public article: Article[];
+
+  @OneToMany(() => ArticleLike, like => like.user)
+  // @JoinColumn({name: 'article_like'})
+  public article_like: ArticleLike[];
 
 }

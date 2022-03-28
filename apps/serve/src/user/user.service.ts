@@ -39,6 +39,7 @@ export class UserService {
       relations: ['tag'],
       where: { author: user },
       order: {
+        isTop: 'DESC',
         id: 'DESC'
       }
     })

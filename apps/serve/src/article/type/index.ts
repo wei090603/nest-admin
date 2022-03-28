@@ -1,7 +1,7 @@
 import { Tag } from "@libs/db/entity/tag.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { PageOptionsDto } from "apps/shared/dto/page.dto";
-import { IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsNumber } from "class-validator";
 
 export class CreateArticleDto {
   @ApiProperty({
@@ -47,7 +47,6 @@ export class CreateArticleDto {
 
 
 export class FindArticleDto extends PageOptionsDto {
-
   @ApiProperty({
     description: '分类',
     required: false,

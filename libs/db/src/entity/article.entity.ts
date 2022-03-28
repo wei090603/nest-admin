@@ -1,6 +1,8 @@
 import { Entity, Column, ManyToOne, ManyToMany, OneToMany, JoinTable, OneToOne, JoinColumn } from 'typeorm';
+import { ArticleLike } from './articleLike.entity';
 import { Base } from './base.entity';
 import { Category } from './category.entity';
+import { Comment } from './comment.entity';
 import { Tag } from './tag.entity';
 import { User } from './user.entity';
 
@@ -71,14 +73,6 @@ export class Article extends Base {
   public likes: number;
 
   @Column({
-    type: 'boolean',
-    name: 'handed',
-    default: false,
-    comment: '当前用户是否点赞 0-否 1-是',
-  })
-  public handed: boolean;
-
-  @Column({
     type: 'int',
     name: 'comments',
     default: 0,
@@ -94,11 +88,11 @@ export class Article extends Base {
 	public tag: Tag[];
 
   // 点赞用户
-  // @OneToMany(() => ArticleLike, (articleLike) => articleLike.article)
-  // public like: ArticleLike[]
+  @OneToMany(() => ArticleLike, articleLike => articleLike.article)
+  public like: ArticleLike[]
 
-  // @OneToMany(() => Comment, comment => comment.article)
-  // public comment: Comment[];
+  @OneToMany(() => Comment, comment => comment.article)
+  public comment: Comment[];
 
   @ManyToOne(() => User, user => user.article)
   @JoinColumn({name: 'author_id'})

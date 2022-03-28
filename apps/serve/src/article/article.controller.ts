@@ -1,5 +1,5 @@
 import { User } from '@libs/db/entity/user.entity';
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { user } from 'apps/shared/decorators/user.decorator';
 import { JwtAuthGuard } from 'apps/shared/guards/guard.strategy';
@@ -32,5 +32,20 @@ export class ArticleController {
   @UseGuards(OptionAuthGuard)
   findSearch(@Query() query: SearchArticleDto, @user() user: User) {
     return this.articleService.findSearch(query, user);
+  }
+
+  @Get('hot/:id')
+  @ApiOperation({ summary: '获取热门文章列表' })
+  @UseGuards(OptionAuthGuard)
+  findHot(@Param('id') id: string, @user() user: User) {
+    return this.articleService.findHot(+id, user);
+  }
+
+  @Get(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取文章详情' })
+  @UseGuards(OptionAuthGuard)
+  findOne(@Param('id') id: string, @user() user: User) {
+    return this.articleService.findOne(+id, user);
   }
 }

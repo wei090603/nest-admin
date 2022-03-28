@@ -8,6 +8,8 @@ import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './comment/comment.module';
+import { ArticleLikeModule } from './article-like/article-like.module';
 
 @Module({
   imports: [
@@ -17,7 +19,9 @@ import { AuthModule } from './auth/auth.module';
     CategoryModule,
     TagModule,
     ArticleModule,
-    AuthModule, 
+    AuthModule,
+    CommentModule,
+    ArticleLikeModule, 
   ],
   controllers: [ServeController],
   providers: [ServeService],
