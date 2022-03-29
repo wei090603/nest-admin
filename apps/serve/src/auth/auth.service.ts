@@ -5,6 +5,7 @@ import { compareSync } from 'bcryptjs';
 import { getRepository, Repository } from 'typeorm';
 import { User } from '@libs/db/entity/user.entity';
 import { Cache } from 'cache-manager'
+import { WxLoginDto } from './type';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +56,19 @@ export class AuthService {
     }
     return user;
   }
+
+ async wxLogin(param: WxLoginDto) {
+   const { code } = param
+   await this.wxUserInfo(code)
+ }
+
+ async wxUserInfo(code: string) {
+  const url = `https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=${code}&grant_type=authorization_code`
+  const data: any = await fetch(url)
+  if (data.status === 200 && data.session_key) {
+
+  }
+ }
 
   /**
    * @Author: tao.wei

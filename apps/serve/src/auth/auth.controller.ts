@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Req, UseGuards, Request} from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards, Request, Query, Body} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { user } from 'apps/shared/decorators/user.decorator';
 import { User } from '@libs/db/entity/user.entity';
 import { JwtAuthGuard } from 'apps/shared/guards/guard.strategy';
-import { LoginDto } from './type';
+import { LoginDto, WxLoginDto } from './type';
 
 @ApiTags('登录管理')
 @Controller('auth')
@@ -20,6 +20,12 @@ export class AuthController {
   async login(@Request() request, @Req() req: { user: User }) {
     console.log(request.ip, 'req');
     return this.service.login(req.user);
+  }
+
+  @Post('wxLogin')
+  @ApiOperation({ description: '微信授权登录', summary: '微信授权登录' })
+  async wxLogin(@Body() data: WxLoginDto) {
+    return this.service.wxLogin(data);
   }
 
   @Get()

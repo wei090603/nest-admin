@@ -12,3 +12,9 @@ export class LoginDto {
   @IsNotEmpty({ message: '密码不能为空' })
   readonly password: string;
 }
+
+export class WxLoginDto {
+  @ApiProperty({ description: 'code', example: '123456' })
+  @IsNotEmpty({ message: 'code不能为空' })
+  readonly code: string;
+}

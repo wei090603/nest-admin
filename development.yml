@@ -43,3 +43,7 @@ BUCKET: tobmovie
 
 # 腾讯地图的key(更改自己的，这里是无效的)
 TENCENT_MAP_KEY: NT4BZ-XI7K3-YY23I-YKHUR-H2UTV-JMFUU
+
+wx:
+  AppId: 123
+  Secrt: efe
