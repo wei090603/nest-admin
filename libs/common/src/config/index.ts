@@ -10,6 +10,8 @@ import { join } from 'path';
 
 const env = process.env.NODE_ENV || 'development'
 
+console.log(env, 'env');
+
 const configFileNameObj = {
   development :'development.yml',
   production: 'production.yml'

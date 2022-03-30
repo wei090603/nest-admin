@@ -6,13 +6,15 @@ import { getRepository, Repository } from 'typeorm';
 import { User } from '@libs/db/entity/user.entity';
 import { Cache } from 'cache-manager'
 import { WxLoginDto } from './type';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
     private readonly jwtService: JwtService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly configService: ConfigService
   ) {}
 
   /**
@@ -63,8 +65,10 @@ export class AuthService {
  }
 
  async wxUserInfo(code: string) {
-  const url = `https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=${code}&grant_type=authorization_code`
-  const data: any = await fetch(url)
+  const AppID = this.configService.get('wx').AppID
+  const AppSecret = this.configService.get('wx').AppSecret
+  const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${AppID}&secret=${AppSecret}&js_code=${code}&grant_type=authorization_code`
+  const data: any = await fetch(url, { method: 'GET' })
   if (data.status === 200 && data.session_key) {
 
   }
