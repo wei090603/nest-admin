@@ -5,9 +5,12 @@ import { compareSync } from 'bcryptjs';
 import { getRepository, Repository } from 'typeorm';
 import { User } from '@libs/db/entity/user.entity';
 import { Cache } from 'cache-manager'
-import { WxLoginDto } from './type';
+import { WxLoginDto, WxUser } from './type';
 import { ConfigService } from '@nestjs/config';
-
+import axios from 'axios';
+import * as crypto from 'crypto'
+import { ApiException } from 'apps/shared/exceptions/api.exception';
+import WXBizDataCrypt from './utils/WXBizDataCrypt'
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,10 +37,7 @@ export class AuthService {
    * @param {*}
    * @return {*}
    */
-  public async validateUser(
-    account: string,
-    password: string,
-  ): Promise<User> {
+  public async validateUser( account: string, password: string ):Promise<void> {
     const user = await getRepository(User)
       .createQueryBuilder('user')
       .select(['user.id', 'id'])
@@ -54,23 +54,37 @@ export class AuthService {
       throw new HttpException('用户被禁用', HttpStatus.FORBIDDEN);
     }
     if (!compareSync(password, user.password)) {
-      throw new HttpException('用户名或密码不正确', HttpStatus.BAD_REQUEST)
+      throw new ApiException(10400, '用户名或密码不正确');
     }
-    return user;
   }
 
  async wxLogin(param: WxLoginDto) {
-   const { code } = param
-   await this.wxUserInfo(code)
+   const { code, user } = param
+   const wxUserInfo = await this.wxUserInfo(code, user)
+   console.log(wxUserInfo, 'wxUserInfo');
+  //  await this.repository.findOne({ where: { openId: 'watermark' } })
+  //  console.log(wxUserInfo, 'wxUserInfo');
  }
 
- async wxUserInfo(code: string) {
+ // 校验微信信息
+ async wxUserInfo(code: string, user: WxUser) {
   const AppID = this.configService.get('wx').AppID
   const AppSecret = this.configService.get('wx').AppSecret
   const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${AppID}&secret=${AppSecret}&js_code=${code}&grant_type=authorization_code`
-  const data: any = await fetch(url, { method: 'GET' })
-  if (data.status === 200 && data.session_key) {
-
+  const data: any  = await axios.get(url)
+  if (data.status === 200 && data.data.session_key) {
+    const sessionKey = data.data.session_key
+    const { rawData, signature, encryptedData, iv } = user
+    const sha1 = crypto.createHash('sha1')
+    sha1.update(rawData)
+    sha1.update(sessionKey)
+    if (sha1.digest('hex') !== signature) {
+      throw new ApiException(10400, '用户签名校验失败');
+    }
+    const pc = new WXBizDataCrypt(AppID, sessionKey)
+    return pc.decryptData(encryptedData, iv)
+  } else {
+    throw new ApiException(10400, '微信授权失败');
   }
  }
 

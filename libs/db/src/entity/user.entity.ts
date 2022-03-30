@@ -126,6 +126,14 @@ export class User extends Base {
   })
   public avatar: string;
 
+  @Column('varchar', {
+    nullable: true,
+    length: 200,
+    name: 'open_id',
+    comment: '微信用户openid',
+  })
+  public openId: string;
+
   @Column('boolean', {
     default: true,
     comment: '所属状态是否有效',

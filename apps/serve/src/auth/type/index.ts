@@ -13,8 +13,19 @@ export class LoginDto {
   readonly password: string;
 }
 
+export type WxUser = {
+  rawData: string
+  signature: string 
+  encryptedData: string
+  iv: string
+}
+
 export class WxLoginDto {
   @ApiProperty({ description: 'code', example: '123456' })
   @IsNotEmpty({ message: 'code不能为空' })
   readonly code: string;
+
+  @ApiProperty({ description: 'user', example: {} })
+  @IsNotEmpty({ message: '用户信息' })
+  readonly user: WxUser;
 }
