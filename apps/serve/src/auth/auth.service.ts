@@ -11,6 +11,8 @@ import axios from 'axios';
 import * as crypto from 'crypto'
 import { ApiException } from 'apps/shared/exceptions/api.exception';
 import WXBizDataCrypt from './utils/WXBizDataCrypt'
+import { hashSync } from 'bcryptjs';
+import { getTemAccount } from 'apps/shared/utils';
 @Injectable()
 export class AuthService {
   constructor(
@@ -58,13 +60,27 @@ export class AuthService {
     }
   }
 
- async wxLogin(param: WxLoginDto) {
-   const { code, user } = param
-   const wxUserInfo = await this.wxUserInfo(code, user)
-   console.log(wxUserInfo, 'wxUserInfo');
-  //  await this.repository.findOne({ where: { openId: 'watermark' } })
-  //  console.log(wxUserInfo, 'wxUserInfo');
- }
+  // 微信授权登录
+  async wxLogin(param: WxLoginDto) {
+    const { code, user } = param
+    const wxUserInfo = await this.wxUserInfo(code, user)
+    let result: User;
+    result = await this.repository.findOne({ where: { openId: wxUserInfo.openId } })
+    const pwd = getTemAccount()
+    const account = getTemAccount('lh')
+    if (!result) {
+      result = await this.repository.save({ 
+        nickName: wxUserInfo.nickName,
+        account: account,
+        avatar: wxUserInfo.avatarUrl,
+        password: hashSync(pwd),
+        sex: wxUserInfo.gender,
+        openId: wxUserInfo.openId
+      })
+    }
+    const payload = { id: String(result.id), account: result.account };
+    return { token: this.jwtService.sign(payload) };
+  }
 
  // 校验微信信息
  async wxUserInfo(code: string, user: WxUser) {
@@ -82,11 +98,11 @@ export class AuthService {
       throw new ApiException(10400, '用户签名校验失败');
     }
     const pc = new WXBizDataCrypt(AppID, sessionKey)
-    return pc.decryptData(encryptedData, iv)
+    return {...pc.decryptData(encryptedData, iv), openId: data.data.openid}
   } else {
     throw new ApiException(10400, '微信授权失败');
   }
- }
+}
 
   /**
    * @Author: tao.wei

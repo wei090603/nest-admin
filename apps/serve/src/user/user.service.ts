@@ -30,7 +30,7 @@ export class UserService {
     if (existing) throw new ApiException(10400, '该用户已注册');
     const value = await this.cacheManager.get(email);
     if (code !== value) throw new ApiException(10400, '验证码错误');
-    await this.repository.insert({ email, password: hashSync(password) })
+    await this.repository.insert({ email, password: hashSync(password), avatar: 'default_avatar.png' })
   }
 
   // 根据用户id获取用户文章列表

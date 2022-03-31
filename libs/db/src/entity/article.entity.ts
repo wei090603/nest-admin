@@ -34,11 +34,11 @@ export class Article extends Base {
 
   @Column({
     type: 'int',
-    name: 'reads',
+    name: 'reading',
     default: 0,
     comment: '阅读数量',
   })
-  public reads: number;
+  public reading: number;
 
   @Column({
     type: 'int',

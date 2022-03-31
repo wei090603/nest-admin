@@ -64,11 +64,9 @@ export class ArticleService {
     .addSelect('tag.name')
     .addSelect('category.id')
     .addSelect('category.title')
-    // .addSelect(subQuery => {
-    //   return subQuery
-    //     .select("articleLike.id", "id")
-    //     .from(ArticleLike, "articleLike")
-    // }, "articleLike")
+    .loadRelationCountAndMap("article.likeCount", "article.like", 'like', 
+      qb =>  qb.andWhere("like.user = :user", { user: user.id } ) 
+    )
     .orderBy('article.id', 'DESC')
     .skip(limit * (page - 1))
     .take(limit)
@@ -117,15 +115,16 @@ export class ArticleService {
 
   // 查询文章详情
   async findOne(id: number, user: User) {
-    const sql = this.articleRepository.createQueryBuilder("article");
 
-    const count = await getManager()
-    .createQueryBuilder(ArticleLike, "articleLike")
-    .where("articleLike.user = :user", { user: user.id })
-    .andWhere('articleLike.article = :article', { article: id })
-    .getCount()
-    
-    return await sql
+    this.articleRepository.createQueryBuilder()
+      .update(Article)
+      .set({ 
+        reading: () => "reading + 1"
+      })
+      .where("id = :id", { id })
+      .execute();
+
+    return await this.articleRepository.createQueryBuilder("article")
     .leftJoinAndSelect('article.author', 'author')
     .leftJoinAndSelect('article.category', 'category')
     .leftJoinAndSelect('article.tag', 'tag')
@@ -137,14 +136,9 @@ export class ArticleService {
     .addSelect('category.title')
     .addSelect('tag.id')
     .addSelect('tag.name')
-    .addSelect(subQuery => {
-      return subQuery
-        .select("COUNT(articleLike.id)", "count")
-        .from(ArticleLike, "articleLike")
-        .where("articleLike.user = :user", { user: user.id })
-        .andWhere('articleLike.article = :article', { article: id })
-        .groupBy('articleLike.id')
-    }, "article.great")
+    .loadRelationCountAndMap("article.likeCount", "article.like", 'like', 
+      qb => qb.andWhere("like.user = :user", { user: user.id } )
+    )
     .getOne()
   }
 }

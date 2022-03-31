@@ -46,6 +46,7 @@ export class User extends Base {
 
   @Column('varchar', {
     unique: true,
+    nullable: true,
     length: 200,
     name: 'email',
     comment: '邮箱地址',
@@ -120,7 +121,6 @@ export class User extends Base {
 
   @Column('varchar', {
     length: 200,
-    default: 'default_avatar.png',
     name: 'avatar',
     comment: '头像地址',
   })
