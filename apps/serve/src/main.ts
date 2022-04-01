@@ -37,14 +37,10 @@ async function bootstrap() {
   // 异常接管，统一异常返回数据
   app.useGlobalFilters(new ApiExceptionFilter());
   // // 统一处理返回接口结果，如果不需要则添加
-  app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()));
+  app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()), new LoggingInterceptor());
   // 设置一个全局作用域的管道
   app.useGlobalPipes(new ValidationPipe());
 
-  app.useGlobalInterceptors(
-    new LoggingInterceptor(),
-  );
-  
   setupSwagger(app);
 
   const { servePort } = config.get('http');
