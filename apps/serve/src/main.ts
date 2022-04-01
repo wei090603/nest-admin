@@ -8,6 +8,7 @@ import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
 import { ServeModule } from './serve.module';
 import { ValidationPipe } from 'apps/shared/pipes/validation.pipe';
+import { LoggingInterceptor } from 'apps/shared/logger/logging';
 
 
 async function bootstrap() {
@@ -39,6 +40,10 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ApiTransformInterceptor(new Reflector()));
   // 设置一个全局作用域的管道
   app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+  );
   
   setupSwagger(app);
 
