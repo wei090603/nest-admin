@@ -99,10 +99,10 @@ export class ArticleService {
       .getRawOne()
     const ids: number[] = chidlId.split(',')
 
-    const qb = this.articleRepository.createQueryBuilder("article");
-    id !== 23 ? qb.orderBy('article.likes', 'DESC'): qb.orderBy('article.comments', 'DESC')
+    const sql = this.articleRepository.createQueryBuilder("article");
+    id !== 23 ? sql.orderBy('article.likes', 'DESC'): sql.orderBy('article.comments', 'DESC')
 
-    return await qb
+    return await sql
     .leftJoinAndSelect('article.author', 'author') // 注意这里
     .leftJoinAndSelect('article.category', 'category')
     .leftJoinAndSelect('article.tag', 'tag') // 注意这里
@@ -111,6 +111,9 @@ export class ArticleService {
     .addSelect('category.id')
     .addSelect('category.title')
     .where({ category: In(ids) })
+    .loadRelationCountAndMap("article.likeCount", "article.like", 'like', 
+      qb => qb.andWhere("like.user = :user", { user: user.id } )
+    )
     .take(3)
     .getMany();
   }
@@ -141,6 +144,7 @@ export class ArticleService {
     .loadRelationCountAndMap("article.likeCount", "article.like", 'like', 
       qb => qb.andWhere("like.user = :user", { user: user.id } )
     )
+    .where("article.id = :id", { id })
     .getOne()
   }
 }
