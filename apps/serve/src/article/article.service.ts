@@ -18,22 +18,24 @@ export class ArticleService {
   ) {}
   
   // 创建新文章
-  async create(data: CreateArticleDto, user: User): Promise<Article> {
-    const article = new Article()
-    if (data.category) {
-      const category = await this.categoryRepository.findOne(data.category)
-      article.category = category
-    }
+  async create(params: CreateArticleDto, user: User) {
+    const { title, content, image, tagId, categoryId } = params
+    console.log(image, 'image');
+    const category = await this.categoryRepository.findOne(categoryId)
     // save 存在即更新不存在则插入
-    if (data.tag.length) {
-      const tag = await this.tagRepository.save(data.tag)
-      article.tag = tag
-    }
-    
-    article.content = data.content
-    article.author = user
+    // const tag = await this.tagRepository.save(data.tag)
 
-    return this.articleRepository.save(article)
+    try {
+      await this.articleRepository.insert({
+        title,
+        content,
+        image,
+        category,
+        author: user,
+      })
+    } catch (error) {
+      console.log(error, 'error');
+    }
   }
 
   async findAll({ page = 1, limit = 10, ...params }: FindArticleDto, user: User): Promise<{ list: Article[], total: number }>{

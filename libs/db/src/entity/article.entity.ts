@@ -18,16 +18,15 @@ export class Article extends Base {
   @Column({
     type: 'varchar',
     name: 'title',
+    length: 30,
     nullable: true,
     comment: '文章标题',
   })
   public title: string;
 
-  @Column({
-    type: 'varchar',
+  @Column("simple-array", {
     name: 'image',
     nullable: true,
-    length: 500,
     comment: '文章图片',
   })
   public image: string[];

@@ -30,7 +30,7 @@ export class CreateArticleDto {
     example: 1,
     required: false
   })
-  readonly category: string;
+  readonly categoryId: string;
 
   @ApiProperty({
     description: '帖子权限',
@@ -43,7 +43,7 @@ export class CreateArticleDto {
     example: [],
     required: false
   })
-  readonly tag: Tag[];
+  readonly tagId: Tag[];
 
 }
 
