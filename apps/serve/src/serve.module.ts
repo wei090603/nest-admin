@@ -10,6 +10,7 @@ import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ArticleLikeModule } from './article-like/article-like.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ArticleLikeModule } from './article-like/article-like.module';
     ArticleModule,
     AuthModule,
     CommentModule,
-    ArticleLikeModule, 
+    ArticleLikeModule,
+    UploadModule
   ],
   controllers: [ServeController],
   providers: [ServeService],

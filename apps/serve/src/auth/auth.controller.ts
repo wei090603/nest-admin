@@ -6,6 +6,7 @@ import { user } from 'apps/shared/decorators/user.decorator';
 import { User } from '@libs/db/entity/user.entity';
 import { JwtAuthGuard } from 'apps/shared/guards/guard.strategy';
 import { LoginDto, WxLoginDto } from './type';
+import { Public } from 'apps/shared/guards/constants';
 
 @ApiTags('登录管理')
 @Controller('auth')

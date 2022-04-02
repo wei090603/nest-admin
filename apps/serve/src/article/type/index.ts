@@ -1,33 +1,34 @@
 import { Tag } from "@libs/db/entity/tag.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { PageOptionsDto } from "apps/shared/dto/page.dto";
-import { IsString, IsNotEmpty, IsOptional, IsNumber } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsNumber, IsArray } from "class-validator";
 
 export class CreateArticleDto {
   @ApiProperty({
     description: '帖子标题',
+    required: false
   })
   @IsString({ message: '帖子标题不是有效的数据' })
   readonly title: string;
 
   @ApiProperty({
     description: '帖子内容',
+    required: false
   })
   @IsString({ message: '帖子内容不是有效的数据' })
-  @IsNotEmpty({ message: '帖子内容不能为空' })
   readonly content: string;
 
   @ApiProperty({
     description: '帖子图片',
+    required: false
   })
-  @IsString({ message: '帖子内容不是有效的数据' })
-  @IsNotEmpty({ message: '帖子内容不能为空' })
-  readonly images: string[];
+  @IsArray({ message: '帖子内容不是有效的数据' })
+  readonly image: string[];
 
   @ApiProperty({
-    nullable: false,
     description: '帖子分类',
     example: 1,
+    required: false
   })
   readonly category: string;
 
@@ -40,6 +41,7 @@ export class CreateArticleDto {
   @ApiProperty({
     description: '帖子标签',
     example: [],
+    required: false
   })
   readonly tag: Tag[];
 

@@ -25,12 +25,12 @@ export class Article extends Base {
 
   @Column({
     type: 'varchar',
-    name: 'images',
+    name: 'image',
     nullable: true,
     length: 500,
     comment: '文章图片',
   })
-  public images: string;
+  public image: string[];
 
   @Column({
     type: 'int',

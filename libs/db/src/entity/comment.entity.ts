@@ -1,18 +1,16 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Article } from './article.entity';
 import { CommentBase } from "./commentBase.entity";
+import { CommentSub } from "./commentSub.entity";
 
 @Entity({name: 'comment'})
 export class Comment extends CommentBase {
 
   @ManyToOne(() => Article, article => article.comment)
+  @JoinColumn({name: 'article_id'})
   public article: Article;
 
-  @ManyToOne(() => Comment, comment => comment.children)
-  @JoinColumn({name: 'parent_id'})
-  public parent: Comment;
-
-  @OneToMany(() => Comment, comment => comment.parent)
-  public children: Comment[];
+  @OneToMany(() => CommentSub, commentSub=> commentSub.parent)
+  public children: CommentSub[];
 
 }

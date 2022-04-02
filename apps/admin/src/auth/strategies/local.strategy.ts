@@ -1,8 +1,3 @@
-/*
- * @Description:
- * @Author: tao.wei
- * @Date: 2021-09-09 15:42:00
- */
 import { Strategy, IStrategyOptions } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';

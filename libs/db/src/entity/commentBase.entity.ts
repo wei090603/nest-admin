@@ -1,4 +1,4 @@
-import { Column, ManyToOne } from "typeorm";
+import { Column, JoinColumn, ManyToOne, OneToOne } from "typeorm";
 import { Base } from "./base.entity";
 import { User } from './user.entity';
 
@@ -27,14 +27,7 @@ export class CommentBase extends Base {
   })
   public status: boolean;
 
-  // @Column({
-  //   type: 'boolean',
-  //   name: 'handed',
-  //   default: false,
-  //   comment: '当前用户是否点赞 0-否 1-是',
-  // })
-  // public handed: boolean;
-
   @ManyToOne(() => User)
+  @JoinColumn({name: 'user_id'})
   public user: User;
 }

@@ -7,6 +7,7 @@ import { Article } from './entity/article.entity';
 import { ArticleLike } from './entity/articleLike.entity';
 import { Category } from './entity/category.entity';
 import { Comment } from './entity/comment.entity';
+import { CommentSub } from './entity/commentSub.entity';
 import { Links } from './entity/links.entity';
 import { LoginLogger } from './entity/loginLogger.entity';
 import { Manager } from './entity/manager.entity';
@@ -32,7 +33,8 @@ const table = [
   Menu,
   User,
   ArticleLike,
-  Comment
+  Comment,
+  CommentSub
 ]
 
 const entity = TypeOrmModule.forFeature(table);

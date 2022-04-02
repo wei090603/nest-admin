@@ -45,7 +45,14 @@ export class FindArticleDto extends PageOptionsDto {
     required: false,
   })
   @IsOptional()
-  readonly title: string;
+  readonly title?: string;
+
+  @ApiProperty({
+    description: '文章内容',
+    required: false,
+  })
+  @IsOptional()
+  readonly content?: string;
 }
 
 

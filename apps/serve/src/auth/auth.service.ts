@@ -39,15 +39,14 @@ export class AuthService {
    * @param {*}
    * @return {*}
    */
-  public async validateUser( account: string, password: string ):Promise<void> {
+  public async validateUser( account: string, password: string ):Promise<User> {
     const user = await getRepository(User)
       .createQueryBuilder('user')
       .select(['user.id', 'id'])
       .addSelect('user.password')
       .addSelect('user.account')
       .addSelect('user.status')
-      .where('user.account = :account OR user.email = :email OR user.phoneNum = :phoneNum' , { account, email: account, phoneNum: account })
-      .printSql()
+      .where('user.account = :account OR user.email = :email OR user.mobile = :mobile' , { account, email: account, mobile: account })
       .getOne();
     if (!user) {
       throw new HttpException('用户不存在', HttpStatus.NOT_FOUND)
@@ -58,6 +57,7 @@ export class AuthService {
     if (!compareSync(password, user.password)) {
       throw new ApiException(10400, '用户名或密码不正确');
     }
+    return user
   }
 
   // 微信授权登录
