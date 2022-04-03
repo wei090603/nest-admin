@@ -6,7 +6,7 @@ import { ArticleLike } from '@libs/db/entity/articleLike.entity';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PageResult } from 'apps/shared/dto/page.dto';
-import { getManager, In, Like, Repository } from 'typeorm';
+import { getManager, In, IsNull, Like, Not, Repository } from 'typeorm';
 import { CreateArticleDto, FindArticleDto, SearchArticleDto } from './type';
 
 @Injectable()
@@ -114,6 +114,7 @@ export class ArticleService {
     .loadRelationCountAndMap("article.likeCount", "article.like", 'like', 
       qb => qb.andWhere("like.user = :user", { user: user.id } )
     )
+    .where({ title: Not('') })
     .take(3)
     .getMany();
   }
