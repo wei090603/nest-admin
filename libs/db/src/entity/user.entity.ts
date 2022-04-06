@@ -7,6 +7,7 @@ import { Entity, Column, OneToMany, JoinColumn, ManyToMany, JoinTable, ManyToOne
 import { Article } from './article.entity';
 import { ArticleLike } from './articleLike.entity';
 import { Base } from './base.entity';
+import { Collect } from './collect.entity';
 
 @Entity('user')
 export class User extends Base {
@@ -147,5 +148,11 @@ export class User extends Base {
   @OneToMany(() => ArticleLike, like => like.user)
   // @JoinColumn({name: 'article_like'})
   public article_like: ArticleLike[];
+
+  @OneToMany(() => Collect, (collect) => collect.user)
+  public collect: Collect[];
+
+  // @ManyToMany(() => UserTag, (userTag) => userTag.user)
+  // public userTag: UserTag[];
 
 }
