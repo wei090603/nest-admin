@@ -22,14 +22,13 @@ export class ArticleService {
     const category = await this.categoryRepository.findOne(categoryId)
     // save 存在即更新不存在则插入
     const tagData = await this.tagRepository.save(tag)
-    console.log(tagData, 'tagData');
     await this.articleRepository.save({
       title,
       content,
       image,
       category,
       author: user,
-      tag: [{id: 46}]
+      tag: tagData
     })
   }
 
