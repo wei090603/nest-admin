@@ -6,6 +6,7 @@ import { Advertise } from './entity/advertise.entity';
 import { Article } from './entity/article.entity';
 import { ArticleLike } from './entity/articleLike.entity';
 import { Category } from './entity/category.entity';
+import { Collect } from './entity/collect.entity';
 import { Comment } from './entity/comment.entity';
 import { CommentSub } from './entity/commentSub.entity';
 import { Links } from './entity/links.entity';
@@ -34,7 +35,8 @@ const table = [
   User,
   ArticleLike,
   Comment,
-  CommentSub
+  CommentSub,
+  Collect
 ]
 
 const entity = TypeOrmModule.forFeature(table);

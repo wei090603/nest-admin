@@ -2,7 +2,7 @@ import { Category } from '@libs/db/entity/category.entity';
 import { Tag } from '@libs/db/entity/tag.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getManager, Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { FindTagDto } from './type';
 
 @Injectable()
@@ -14,15 +14,20 @@ export class TagService {
 
   async findAll(query: FindTagDto): Promise<Tag[]>  {
     const { name } = query
-    return await this.tagRepository.find({
-      select: ['id', 'name'],
-      where: {name: Like(`%${name ?? ''}%`)},
-      order: { id: 'DESC' },
-    })
+    return await this.tagRepository.createQueryBuilder("tag")
+    .leftJoinAndSelect("tag.article", "article")
+    .select("Count(tag.id)", "count")
+    .addSelect('tag.id', 'id')
+    .addSelect('tag.name', 'name')
+    .where("tag.name like :name", {name: '%' + name + '%' })
+    .groupBy('tag.id')
+    .orderBy('count', 'DESC')
+    .take(20)
+    .getRawMany()
   }
 
   async findHot(): Promise<Tag[]> {
-    return await getManager().createQueryBuilder(Tag, 'tag')
+    return await this.tagRepository.createQueryBuilder("tag")
       .innerJoinAndSelect("tag.article", "article")
       .select("Count(tag.id)", "count")
       .addSelect('tag.id', 'id')

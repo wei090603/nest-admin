@@ -29,28 +29,4 @@ export class Tag extends Base {
   }) // 可以手动指定中间表明
 	public article: Article[];
 
-
-  // @Column({
-  //   type: 'varchar',
-  //   unique: true,
-  //   name: 'name',
-  //   length: 30,
-  //   comment: '标签名称',
-  // })
-  // public name: string;
-
-  // @Column({
-  //   type: 'int',
-  //   name: 'grade',
-  //   comment: '数级',
-  //   nullable: true,
-  // })
-  // public grade: number
-
-  // @ManyToOne(() => Tag, tag => tag.children)
-  // @JoinColumn({name: 'parent_id'})
-  // public parent: Tag;
-
-  // @OneToMany(() => Tag, tag => tag.parent)
-  // public children: Tag[];
 }
