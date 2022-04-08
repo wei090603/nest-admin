@@ -1,9 +1,10 @@
 import { Category } from '@libs/db/entity/category.entity';
 import { Tag } from '@libs/db/entity/tag.entity';
+import { User } from '@libs/db/entity/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FindTagDto } from './type';
+import { FindTagDto, TagArticle } from './type';
 
 @Injectable()
 export class TagService {
@@ -36,5 +37,24 @@ export class TagService {
       .orderBy('count', 'DESC')
       .take(10)
       .getRawMany()
+  }
+  
+  async findArticle({ page = 1, limit = 10, ...params }: TagArticle, user: User) {
+    const { id } = params
+    const [list, total] = await this.tagRepository.createQueryBuilder("tag")
+    .leftJoinAndSelect("tag.article", "article")
+    .select('tag')
+    .addSelect('article')
+    .orderBy('article.id', 'DESC')
+    .skip(limit * (page - 1))
+    .take(limit)
+    .where("tag.id = :id", { id })
+    .getManyAndCount();
+
+    return { list, total }
+  }
+
+  async findOne(id: number) {
+    return await this.tagRepository.findOne(id)
   }
 }

@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { PageOptionsDto } from "apps/shared/dto/page.dto";
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class TagInfo {
@@ -31,3 +32,11 @@ export class FindTagDto {
   @IsOptional()
   readonly name: string;
 }
+
+export class TagArticle extends PageOptionsDto {
+  @ApiProperty({
+    description: 'id',
+  })
+  readonly id: number;
+}
+

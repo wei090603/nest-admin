@@ -43,7 +43,7 @@ export class CreateArticleDto {
     example: [],
     required: false
   })
-  readonly tagId: Tag[];
+  readonly tag: Tag[];
 
 }
 

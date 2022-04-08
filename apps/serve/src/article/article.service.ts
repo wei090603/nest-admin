@@ -2,11 +2,10 @@ import { Article } from '@libs/db/entity/article.entity';
 import { Category } from '@libs/db/entity/category.entity';
 import { Tag } from '@libs/db/entity/tag.entity';
 import { User } from '@libs/db/entity/user.entity';
-import { ArticleLike } from '@libs/db/entity/articleLike.entity';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PageResult } from 'apps/shared/dto/page.dto';
-import { getManager, In, IsNull, Like, Not, Repository } from 'typeorm';
+import { In, Like, Not, Repository } from 'typeorm';
 import { CreateArticleDto, FindArticleDto, SearchArticleDto } from './type';
 
 @Injectable()
@@ -19,27 +18,23 @@ export class ArticleService {
   
   // 创建新文章
   async create(params: CreateArticleDto, user: User) {
-    const { title, content, image, tagId, categoryId } = params
-    console.log(image, 'image');
+    const { title, content, image, tag, categoryId } = params
     const category = await this.categoryRepository.findOne(categoryId)
     // save 存在即更新不存在则插入
-    // const tag = await this.tagRepository.save(data.tag)
-
-    try {
-      await this.articleRepository.insert({
-        title,
-        content,
-        image,
-        category,
-        author: user,
-      })
-    } catch (error) {
-      console.log(error, 'error');
-    }
+    const tagData = await this.tagRepository.save(tag)
+    console.log(tagData, 'tagData');
+    await this.articleRepository.save({
+      title,
+      content,
+      image,
+      category,
+      author: user,
+      tag: [{id: 46}]
+    })
   }
 
-  async findAll({ page = 1, limit = 10, ...params }: FindArticleDto, user: User): Promise<{ list: Article[], total: number }>{
-    const { categoryId } = params
+  async findAll(params: FindArticleDto, user: User): Promise<{ list: Article[], total: number }>{
+    const { categoryId, page = 1, limit = 10 } = params
     let ids: number[] = []
 
     if (categoryId) {
@@ -55,8 +50,8 @@ export class ArticleService {
     ids.length === 0 ? qb: qb.where({ category: In(ids) })
 
     const [list, total] = await qb
-    .leftJoinAndSelect('article.author', 'author') // 注意这里
-    .leftJoinAndSelect('article.tag', 'tag') // 注意这里
+    .leftJoinAndSelect('article.author', 'author') // 控制返回参数
+    .leftJoinAndSelect('article.tag', 'tag')
     .leftJoinAndSelect('article.category', 'category')
     .select('article')
     .addSelect('author.id')
