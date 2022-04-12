@@ -10,7 +10,7 @@ export class ArticleLike extends Base {
   @JoinColumn({name: 'article_id'})
   public article: Article;
 
-  @ManyToOne(() => User, (user) => user.article_like)
+  @ManyToOne(() => User, (user) => user.articleLike)
   @JoinColumn({name: 'user_id'})
   public user: User;
 }

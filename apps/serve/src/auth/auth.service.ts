@@ -7,12 +7,14 @@ import { User } from '@libs/db/entity/user.entity';
 import { Cache } from 'cache-manager'
 import { WxLoginDto, WxUser } from './type';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
-import * as crypto from 'crypto'
 import { ApiException } from 'apps/shared/exceptions/api.exception';
 import WXBizDataCrypt from './utils/WXBizDataCrypt'
 import { hashSync } from 'bcryptjs';
 import { getTemAccount } from 'apps/shared/utils';
+
+import axios from 'axios';
+import * as crypto from 'crypto'
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -112,9 +114,8 @@ export class AuthService {
    */
   async findMe(id: number): Promise<User> {
     const userInfo: User = await this.cacheManager.get(id.toString());
-    if (userInfo) return userInfo
     const user = await this.repository.findOne(id, {
-      // relations: ['userTag'],
+      relations: ['userTag'],
     });
     await this.cacheManager.set(id.toString(), user, { ttl: 7200 });
     return user;

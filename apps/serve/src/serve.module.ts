@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ArticleLikeModule } from './article-like/article-like.module';
 import { UploadModule } from './upload/upload.module';
+import { UserTagModule } from './user-tag/user-tag.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { UploadModule } from './upload/upload.module';
     AuthModule,
     CommentModule,
     ArticleLikeModule,
-    UploadModule
+    UploadModule,
+    UserTagModule
   ],
   controllers: [ServeController],
   providers: [ServeService],

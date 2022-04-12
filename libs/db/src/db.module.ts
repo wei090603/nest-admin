@@ -18,6 +18,7 @@ import { Resources } from './entity/resources.entity';
 import { Roles } from './entity/roles.entity';
 import { Tag } from './entity/tag.entity';
 import { User } from './entity/user.entity';
+import { UserTag } from './entity/userTag.entity';
 
 
 const table = [
@@ -36,7 +37,8 @@ const table = [
   ArticleLike,
   Comment,
   CommentSub,
-  Collect
+  Collect,
+  UserTag
 ]
 
 const entity = TypeOrmModule.forFeature(table);

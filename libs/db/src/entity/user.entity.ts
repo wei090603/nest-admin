@@ -1,13 +1,9 @@
-/*
- * @Description: 
- * @Author: tao.wei
- * @Date: 2021-09-18 11:42:10
- */
-import { Entity, Column, OneToMany, JoinColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany, JoinColumn, ManyToMany } from 'typeorm';
 import { Article } from './article.entity';
 import { ArticleLike } from './articleLike.entity';
 import { Base } from './base.entity';
 import { Collect } from './collect.entity';
+import { UserTag } from './userTag.entity';
 
 @Entity('user')
 export class User extends Base {
@@ -146,13 +142,13 @@ export class User extends Base {
   public article: Article[];
 
   @OneToMany(() => ArticleLike, like => like.user)
-  // @JoinColumn({name: 'article_like'})
-  public article_like: ArticleLike[];
+  @JoinColumn({ name: 'article_like' })
+  public articleLike: ArticleLike[];
 
   @OneToMany(() => Collect, (collect) => collect.user)
   public collect: Collect[];
 
-  // @ManyToMany(() => UserTag, (userTag) => userTag.user)
-  // public userTag: UserTag[];
+  @ManyToMany(() => UserTag, (userTag) => userTag.user)
+  public userTag: UserTag[];
 
 }
