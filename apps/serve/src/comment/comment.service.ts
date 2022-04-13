@@ -25,6 +25,13 @@ export class CommentService {
       user,
       content
     })
+    await this.articleRepository.createQueryBuilder()
+      .update(Article)
+      .set({ 
+        likes: () => "likes + 1"
+      })
+      .where("id = :id", { id: articleId })
+      .execute();
   }
 
   // 添加子级评论
