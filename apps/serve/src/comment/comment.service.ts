@@ -28,7 +28,7 @@ export class CommentService {
     await this.articleRepository.createQueryBuilder()
       .update(Article)
       .set({ 
-        likes: () => "likes + 1"
+        comments: () => "comments + 1"
       })
       .where("id = :id", { id: articleId })
       .execute();
