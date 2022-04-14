@@ -36,17 +36,13 @@ export class CommentService {
 
   // 添加子级评论
   async createSub(params: CreateCommenSubtDto, user: User) {
-    const { parentId, content, replyId } = params
-    const parent = await this.commentRepository.findOne(parentId)
-    let reply: User
-    if (replyId) {
-      reply = await this.userRepository.findOne(replyId)
-    }
+    const { parentId, content } = params
+    const parent = await this.commentRepository.findOne(parentId, {relations: ['user']})
     await this.commentSubRepository.insert({
       parent,
       content,
       user,
-      reply
+      reply: parent.user
     })
   }
 
