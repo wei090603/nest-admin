@@ -63,6 +63,7 @@ export class CommentService {
     .addSelect('childUser.nickName')
     .addSelect('reply.nickName')
     .where("comment.article = :article", { article: id})
+    .orderBy('children.id', 'DESC')
     .orderBy('comment.id', 'ASC')
     .getManyAndCount()
 
