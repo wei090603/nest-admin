@@ -17,26 +17,11 @@ export class CreateCommentDto {
   readonly content: string;
 }
 
-export class CreateCommenSubtDto {
-  @ApiProperty({
-    description: '评论内容',
-  })
-  @IsString({ message: '评论内容有效的数据' })
-  @IsNotEmpty({ message: '评论内容不能为空' })
-  readonly content: string;
-
+export class CreateCommenSubtDto extends CreateCommentDto {
   @ApiProperty({
     description: '评论父级id',
-    example: null
+    example: 1
   })
   @IsOptional()
   readonly parentId: number;
-
-  @ApiProperty({
-    description: '回复用户ID',
-    example: null,
-    required: false
-  })
-  @IsOptional()
-  replyId?: number
 }
