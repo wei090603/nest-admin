@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { ServeModule } from './serve.module';
 import { ValidationPipe } from 'apps/shared/pipes/validation.pipe';
 import { LoggingInterceptor } from 'apps/shared/logger/logging';
-
+import { WsAdapter } from './notice/ws.adapter';
 
 async function bootstrap() {
   // 设置cors允许跨域访问
@@ -18,6 +18,7 @@ async function bootstrap() {
     bufferLogs: true,
     logger: ['log', 'error', 'warn'],
   });
+  app.useWebSocketAdapter(new WsAdapter(app)); // 使用我们的适配器
   const config = app.get<ConfigService>(ConfigService);
 
   // 配置 文件夹为静态目录，以达到可直接访问下面文件的目的

@@ -114,6 +114,7 @@ export class AuthService {
    */
   async findMe(id: number): Promise<User> {
     const userInfo: User = await this.cacheManager.get(id.toString());
+    if (userInfo) return userInfo
     const user = await this.repository.findOne(id, {
       relations: ['userTag'],
     });
