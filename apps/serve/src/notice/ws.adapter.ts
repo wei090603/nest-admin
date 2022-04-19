@@ -11,7 +11,7 @@ export class WsAdapter implements WebSocketAdapter {
     return new WebSocket.Server({ port, ...options });
   }
 
-  bindClientConnect(server, callback: Function) {
+  bindClientConnect(server: { on: (arg0: string, arg1: Function) => void; }, callback: Function) {
     server.on('connection', callback);
   }
 
@@ -50,7 +50,7 @@ export class WsAdapter implements WebSocketAdapter {
     return process(messageHandler.callback(message.data));
   }
 
-  close(server) {
+  close(server: { close: () => void; }) {
     server.close();
   }
 }
