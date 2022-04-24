@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Author: tao.wei
+ * @Date: 2021-09-22 14:36:23
+ */
 import { Entity, Tree, Column, TreeChildren, TreeParent, TreeLevelColumn, RelationId, ManyToMany } from "typeorm";
 import { Base } from "./base.entity";
 import { Roles } from "./roles.entity";
@@ -32,7 +37,7 @@ export class Resources extends Base {
     name: 'path',
     length: 200,
     unique: true, // 将列标记为唯一
-    comment: '路由'
+    comment: '路径'
   })
   public path: string;
 

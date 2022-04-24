@@ -23,9 +23,9 @@ import { UserTag } from './entity/userTag.entity';
 
 const table = [
   Manager, 
-  LoginLogger, 
   Roles,
   Resources,
+  LoginLogger, 
   Advertise,
   Article,
   Category,

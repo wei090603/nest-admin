@@ -14,6 +14,7 @@ import { LinksModule } from './links/links.module';
 import { LoginLoggerModule } from './login-logger/login-logger.module';
 import { NoticeModule } from './notice/notice.module';
 import { UploadModule } from './upload/upload.module';
+import { ResourcesModule } from './resources/resources.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { UploadModule } from './upload/upload.module';
     LinksModule,
     LoginLoggerModule,
     NoticeModule,
-    UploadModule
+    UploadModule,
+    ResourcesModule
   ],
   controllers: [AppController],
   providers: [AppService],
