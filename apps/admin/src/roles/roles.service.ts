@@ -46,7 +46,7 @@ export class RolesService {
   }
   
   // 查询当前角色权限
-   async roleMenu(id: number): Promise<Roles> {
+   async roleMenu(id: number): Promise<number[]> {
     const { resourcesId } = await this.rolesRepository.createQueryBuilder('roles')
       .leftJoinAndSelect("roles.resources", "resources")
       .select("GROUP_CONCAT(resources.id)", "resourcesId")
