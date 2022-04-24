@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString, MinLength } from "class-validator";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { IsArray, IsOptional, IsString, MinLength } from "class-validator";
 import { PageOptionsDto } from "apps/shared/dto/page.dto";
 
 
@@ -37,3 +37,11 @@ export class FindRolesDto extends PageOptionsDto {
   @IsOptional()
   readonly roleName: string;
 }
+
+export class ResourcesDto {
+  @ApiProperty({ description: '资源id', example: [1] })
+  @IsArray({ message: '资源id不是有效的数据' })
+  readonly resourcesId: Number[];
+}
+
+export class UpdateRoleDto extends PartialType(CommonRoles) {}

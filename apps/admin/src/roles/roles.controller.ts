@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { CommonRoles, FindRolesDto } from './dto';
+import { CommonRoles, FindRolesDto, ResourcesDto, UpdateRoleDto } from './dto';
 import { PageRolesList } from './res';
 import { RolesService } from './roles.service';
 
@@ -28,5 +28,29 @@ export class RolesController {
   @ApiOperation({ summary: '添加角色' })
   async register(@Body() data: CommonRoles) {
     return this.rolesService.create(data);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: '根据ID获取角色信息', description: '根据ID获取角色信息' })
+  async getRoleMenu(@Param('id') id: number) {
+    return await this.rolesService.roleMenu(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: '修改角色信息', description: '修改角色信息' })
+  async update(@Param('id') id: string, @Body() data: UpdateRoleDto) {
+    return await this.rolesService.update(+id, data);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: '删除角色', description: '删除菜单' })
+  async remove(@Param('id') id: string) {
+    return await this.rolesService.remove(+id);
+  }
+  
+  @Patch('resources/:id')
+  @ApiOperation({summary: '角色添加资源权限', description: '角色添加资源权限'})
+  async resources(@Param('id') id: string, @Body() data: ResourcesDto) {
+    return this.rolesService.resources(+id, data);
   }
 }

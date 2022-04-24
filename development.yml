@@ -5,18 +5,18 @@ http:
 db:
   mysql:
     type: mysql
-    host: 139.155.172.199
+    host: 127.0.0.1
     port: 3306
     username: root
     password: weitao
-    database: nest_blog
+    database: orchid
     logging: ['error']
     synchronize: true
     timezone: '+08:00'
     cache: { duration: 0 }
 # CACHE REDIS
 redis:
-  host: 139.155.172.199
+  host: 127.0.0.1
   password: 123456
   port: 6379
 

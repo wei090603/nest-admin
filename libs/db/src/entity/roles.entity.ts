@@ -33,7 +33,17 @@ export class Roles extends Base {
   public remark: string;
 
   @ManyToMany(() => Resources,  resources=> resources.roles)
-  @JoinTable({ name: 'roles_resources' })
+  @JoinTable({ 
+    name: 'roles_resources', 
+    joinColumn: {
+      name: "roles_id",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "resources_id",
+      referencedColumnName: "id"
+    }
+  })
   public resources: Resources[];
 
   @ManyToMany(() => Manager, (manager) => manager.roles)

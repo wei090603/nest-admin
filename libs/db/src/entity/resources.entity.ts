@@ -56,6 +56,11 @@ export class Resources extends Base {
   public parent: Resources;
 
   @TreeLevelColumn()
+  @Column('int', {
+    name: 'level',
+    default: 0,
+    comment: '子级数量'
+  })
   public level: number;
 
   @ManyToMany(() => Roles, (roles) => roles.resources)

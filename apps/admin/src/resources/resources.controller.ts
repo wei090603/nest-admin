@@ -1,9 +1,4 @@
-/*
- * @Description: 
- * @Author: tao.wei
- * @Date: 2021-09-22 14:57:34
- */
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ResourcesService } from './resources.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateResourceDto, UpdateResourceDto } from './dto';
