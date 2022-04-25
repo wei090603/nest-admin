@@ -12,7 +12,8 @@ export class ArticleService {
     private readonly articleRepository: Repository<Article>,
   ) {}
 
-  async findAll({ page = 1, limit = 10, title }: FindArticleDto) : Promise<PageResult<Article>> {
+  async findAll({ page = 1, limit = 10, ...params }: FindArticleDto) : Promise<PageResult<Article>> {
+    const { title } = params
     const [list, total] = await this.articleRepository.findAndCount({
       skip: limit * (page - 1),
       take: limit,
