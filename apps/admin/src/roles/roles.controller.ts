@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { RolesGuard } from 'apps/shared/guards/roles.guard';
 import { CommonRoles, FindRolesDto, ResourcesDto, UpdateRoleDto } from './dto';
 import { PageRolesList } from './res';
 import { RolesService } from './roles.service';
@@ -7,6 +8,7 @@ import { RolesService } from './roles.service';
 @ApiTags('角色管理')
 @ApiBearerAuth()
 @Controller('roles')
+// @UseGuards(RolesGuard)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 

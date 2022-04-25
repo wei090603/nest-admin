@@ -48,7 +48,7 @@ export class AuthService {
     userInfo = await this.cacheManager.get(id.toString());
     if (!userInfo) {
       userInfo = await this.authRepository.findOne(id, {
-        relations: ['roles'],
+        relations: ['roles', 'roles.resources']
       });
       this.cacheManager.set(id.toString(), userInfo, { ttl: 7200 });
     }

@@ -4,6 +4,8 @@ import { RolesController } from './roles.controller';
 
 @Module({
   controllers: [RolesController],
-  providers: [RolesService]
+  providers: [
+    RolesService,
+  ]
 })
 export class RolesModule {}

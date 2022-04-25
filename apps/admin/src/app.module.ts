@@ -15,6 +15,8 @@ import { LoginLoggerModule } from './login-logger/login-logger.module';
 import { NoticeModule } from './notice/notice.module';
 import { UploadModule } from './upload/upload.module';
 import { ResourcesModule } from './resources/resources.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from 'apps/shared/guards/guard.strategy';
 
 @Module({
   imports: [
@@ -34,6 +36,12 @@ import { ResourcesModule } from './resources/resources.module';
     ResourcesModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
