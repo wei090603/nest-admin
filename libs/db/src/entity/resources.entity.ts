@@ -49,6 +49,14 @@ export class Resources extends Base {
   })
   public count: number;
 
+  @Column({
+    type: 'boolean',
+    name: 'status',
+    comment: '是否显示 0-不显示 1-显示',
+    default: false,
+  })
+  public status: boolean;
+
   @TreeChildren({ cascade: true })
   public children: Resources[];
 
