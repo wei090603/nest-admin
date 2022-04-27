@@ -3,7 +3,7 @@
  * @Author: tao.wei
  * @Date: 2021-09-22 14:36:23
  */
-import { Entity, Tree, Column, TreeChildren, TreeParent, TreeLevelColumn, RelationId, ManyToMany } from "typeorm";
+import { Entity, Tree, Column, TreeChildren, TreeParent, TreeLevelColumn, RelationId, ManyToMany, JoinTable } from "typeorm";
 import { Base } from "./base.entity";
 import { Roles } from "./roles.entity";
 
@@ -71,6 +71,7 @@ export class Resources extends Base {
   })
   public level: number;
 
+  
   @ManyToMany(() => Roles, (roles) => roles.resources)
   public roles: Roles[];
 }
