@@ -3,6 +3,8 @@ import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiQuery
 import { FindManagerDto, CreateManagerDto } from './dto';
 import { PageManagerList } from './response';
 import { ManagerService } from './manager.service';
+import { user } from 'apps/shared/decorators/user.decorator';
+import { Manager } from '@libs/db/entity/manager.entity';
 
 @ApiTags('后台用户管理')
 @ApiBearerAuth()
@@ -45,5 +47,11 @@ export class ManagerController {
   @ApiOperation({ summary: '删除用户', description: '删除用户' })
   async remove(@Param('id') id: string) {
     return await this.managerService.remove(+id);
+  }
+
+  @Get('resources')
+  @ApiOperation({summary: '获取当前用户菜单权限', description: '获取当前用户菜单权限'})
+  async resources (@user() user: Manager) {
+    return await this.managerService.resources(user.roles);
   }
 }

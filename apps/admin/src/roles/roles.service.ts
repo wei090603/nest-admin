@@ -71,7 +71,8 @@ export class RolesService {
       roleName, remark, mark,
     });
   }
-
+  
+  // 角色 修改权限
   async resources(id: number, data: ResourcesDto): Promise<void> {
     const { resourcesId } =  data
     // 根据id 查询资源模型

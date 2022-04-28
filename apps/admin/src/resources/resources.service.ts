@@ -1,5 +1,5 @@
 import { Resources } from '@libs/db/entity/resources.entity';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
 import { TreeRepository } from 'typeorm';
@@ -50,10 +50,9 @@ export class ResourcesService {
   }
 
   async update(id: number, data: UpdateResourceDto): Promise<void> {
-    const { path, type, icon, title, parentId } = data
-    const parent = await this.repository.findOne(parentId);
+    const { path, type, icon, title } = data
     await this.repository.update(id, {
-      path, type, icon, title, parent
+      path, type, icon, title, 
     });
   }
 

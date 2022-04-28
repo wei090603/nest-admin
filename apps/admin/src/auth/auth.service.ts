@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manager } from '@libs/db/entity/manager.entity';
 import { getManager, Repository } from 'typeorm';
@@ -45,12 +45,23 @@ export class AuthService {
 
   async findMe(id: number): Promise<Manager> {
     let userInfo: Manager
-    userInfo = await this.cacheManager.get(id.toString());
+    // userInfo = await this.cacheManager.get(id.toString());
     if (!userInfo) {
-      userInfo = await this.authRepository.findOne(id, {
-        relations: ['roles', 'roles.resources']
-      });
-      this.cacheManager.set(id.toString(), userInfo, { ttl: 7200 });
+      userInfo = await this.authRepository.createQueryBuilder('auth')
+      .leftJoinAndSelect('auth.roles', 'roles')
+      .leftJoinAndSelect('roles.resources', 'resources', "resources.type = :type", { type: 'button' })
+      .select('auth')
+      .addSelect('roles.id')
+      .addSelect('roles.mark')
+      .addSelect('resources.title')
+      .addSelect('resources.path')
+      .where("auth.id = :id", { id })
+      .getOne()
+      Logger.log(userInfo, 'userInfo')
+      // findOne(id, {
+      //   relations: ['roles', 'roles.resources']
+      // });
+      // this.cacheManager.set(id.toString(), userInfo, { ttl: 7200 });
     }
     return userInfo;
   }

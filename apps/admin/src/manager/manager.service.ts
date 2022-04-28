@@ -74,4 +74,10 @@ export class ManagerService {
     const existing = await this.managerRepository.findOne({ account });;
     if (existing) throw new ApiException(10400, '用户已存在');
   }
+
+  async resources(roles: any[]) {
+    const roleId: number[] = roles.map((item: any) => item.id); 
+    this.rolesRepository.createQueryBuilder('roles')
+    console.log(roleId, 'resourcesList');
+  }
 }

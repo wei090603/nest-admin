@@ -7,6 +7,7 @@ import {
   IsBoolean,
   IsOptional,
   IsNumber,
+  ValidateIf,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PageOptionsDto } from 'apps/shared/dto/page.dto';
@@ -31,17 +32,19 @@ export class CommonManager {
     description: '邮箱',
     required: false
   })
-  @IsOptional()
   @IsEmail({}, { message: '邮箱格式不正确' })
+  @IsOptional()
+  @ValidateIf((obj, value) => value)
   readonly email: string;
 
   @ApiProperty({
     description: '手机号码',
     required: false
   })
-  @IsOptional()
   @IsString({ message: '不是有效的数据' })
   @IsMobilePhone('zh-CN', {}, { message: '手机号错误' })
+  @IsOptional()
+  @ValidateIf((obj, value) => value)
   readonly phone: string;
 
   @ApiProperty({
@@ -50,6 +53,8 @@ export class CommonManager {
     example: ''
   })
   @IsString({ message: '不是有效的数据' })
+  @IsOptional()
+  @ValidateIf((obj, value) => value)
   readonly remark: string;
   
 }
