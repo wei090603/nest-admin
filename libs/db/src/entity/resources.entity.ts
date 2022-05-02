@@ -3,12 +3,11 @@
  * @Author: tao.wei
  * @Date: 2021-09-22 14:36:23
  */
-import { Entity, Tree, Column, TreeChildren, TreeParent, TreeLevelColumn, RelationId, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, ManyToMany, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Base } from "./base.entity";
 import { Roles } from "./roles.entity";
 
 @Entity('resources')
-@Tree("closure-table")
 export class Resources extends Base {
 
   @Column('varchar', {
@@ -41,14 +40,6 @@ export class Resources extends Base {
   })
   public path: string;
 
-  @Column('int', {
-    nullable: true,
-    name: 'count',
-    default: 0,
-    comment: '子级数量'
-  })
-  public count: number;
-
   @Column({
     type: 'boolean',
     name: 'status',
@@ -57,20 +48,30 @@ export class Resources extends Base {
   })
   public status: boolean;
 
-  @TreeChildren({ cascade: true })
-  public children: Resources[];
-
-  @TreeParent()
-  public parent: Resources;
-
-  @TreeLevelColumn()
   @Column('int', {
+    nullable: true,
     name: 'level',
     default: 0,
     comment: '子级数量'
   })
   public level: number;
 
+  @ManyToOne(() => Resources, type => type.children)
+  @JoinColumn({name: 'parent_id'})
+  public parent: Resources;
+
+  @OneToMany(() => Resources, type => type.parent, {
+    cascade: true,
+  })
+  public children: Resources[];
+
+  @Column('int', {
+    nullable: true,
+    name: 'parent_id',
+    default: 0,
+    comment: '父级id'
+  })
+  public parentId: number;
   
   @ManyToMany(() => Roles, (roles) => roles.resources)
   public roles: Roles[];

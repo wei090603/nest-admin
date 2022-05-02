@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manager } from '@libs/db/entity/manager.entity';
-import { getManager, Like, Repository } from 'typeorm';
+import { getManager, Like, Repository, TreeRepository } from 'typeorm';
 import { hashSync } from 'bcryptjs';
 import { CreateManagerDto, FindManagerDto } from './dto';
 import { Roles } from '@libs/db/entity/roles.entity';
 import { PageResult } from 'apps/shared/dto/page.dto';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
+import { Resources } from '@libs/db/entity/resources.entity';
 
 @Injectable()
 export class ManagerService {
@@ -77,7 +78,14 @@ export class ManagerService {
 
   async resources(roles: any[]) {
     const roleId: number[] = roles.map((item: any) => item.id); 
-    this.rolesRepository.createQueryBuilder('roles')
-    console.log(roleId, 'resourcesList');
+    const data = await this.rolesRepository.createQueryBuilder('roles')
+    .leftJoinAndSelect('roles.resources', 'resources', "resources.type = 'menu'")
+    .select('roles.id')
+    .addSelect('resources')
+    .where('roles.id IN (:...ids)', { ids: roleId })
+    .getMany()
+    const resourcesList = data.map((item: Roles) => item.resources);
+    const resources = resourcesList.reduce((a: any[], b: any) => a.concat(b) ); // 二维数组转一维数组
+    return resources
   }
 }

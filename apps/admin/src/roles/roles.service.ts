@@ -52,8 +52,7 @@ export class RolesService {
       .select("GROUP_CONCAT(resources.id)", "resourcesId")
       .where("roles.id = :id", { id })
       .getRawOne()
-    const ids = resourcesId?.split(',') ?? []
-    return ids.map(Number)
+    return resourcesId?.split(',').map(Number) ?? []
   }
 
   async remove(id: number) {

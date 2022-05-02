@@ -57,7 +57,6 @@ export class AuthService {
       .addSelect('resources.path')
       .where("auth.id = :id", { id })
       .getOne()
-      Logger.log(userInfo, 'userInfo')
       // findOne(id, {
       //   relations: ['roles', 'roles.resources']
       // });
