@@ -40,11 +40,19 @@ export class Resources extends Base {
   })
   public path: string;
 
+  @Column('varchar', {
+    nullable: true,
+    name: 'component',
+    length: 200,
+    comment: '组件路径'
+  })
+  public component: string;
+
   @Column({
     type: 'boolean',
     name: 'status',
     comment: '是否显示 0-不显示 1-显示',
-    default: false,
+    default: true,
   })
   public status: boolean;
 

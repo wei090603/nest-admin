@@ -8,6 +8,7 @@ import { Roles } from '@libs/db/entity/roles.entity';
 import { PageResult } from 'apps/shared/dto/page.dto';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
 import { Resources } from '@libs/db/entity/resources.entity';
+import { initTree } from 'apps/shared/utils';
 
 @Injectable()
 export class ManagerService {
@@ -83,9 +84,11 @@ export class ManagerService {
     .select('roles.id')
     .addSelect('resources')
     .where('roles.id IN (:...ids)', { ids: roleId })
+    .orderBy('resources.id', 'DESC')
     .getMany()
     const resourcesList = data.map((item: Roles) => item.resources);
-    const resources = resourcesList.reduce((a: any[], b: any) => a.concat(b) ); // 二维数组转一维数组
-    return resources
+    // const resources = resourcesList.reduce((a: any[], b: any) => a.concat(b) ); // 二维数组转一维数组
+    const newArr = resourcesList.flat()
+    return initTree(newArr)
   }
 }

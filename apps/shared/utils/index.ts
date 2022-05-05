@@ -30,3 +30,18 @@ export const getTemAccount = (prefix = "", randomLength = 7) => {
   // 将随机生成的名字返回
   return name;
 }
+
+// 转换为树形结构
+export const initTree = (data, parentId = null) => {
+  // jsonArray 变量数据
+  // 第一次以后：根据id去查询parent_id相同的（相同为子数据）
+  // 第一次：查找所有parent_id为null的数据组成第一级
+  const children = data.filter((item) => item.parentId == parentId);
+  // 第一次：循环parent_id为null数组
+  return children.map((item) => ({
+    ...item,
+    // 当前存在id（id与parent_id应该是必须有的）调用initTree() 查找所有parent_id为本id的数据
+    // childs字段写入
+    children: initTree(data, item.id),
+  }));
+}

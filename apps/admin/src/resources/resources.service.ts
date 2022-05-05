@@ -2,6 +2,7 @@ import { Resources } from '@libs/db/entity/resources.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiException } from 'apps/shared/exceptions/api.exception';
+import { initTree } from 'apps/shared/utils';
 import { Repository } from 'typeorm';
 import { CreateResourceDto, UpdateResourceDto } from './dto';
 
@@ -22,8 +23,8 @@ export class ResourcesService {
    * @param {CreateResourceDto} data
    * @return {*}
    */
-  async create(data: CreateResourceDto) {
-    const { path, type, icon, title, parentId } = data
+  async create(data: CreateResourceDto): Promise<void> {
+    const { path, type, icon, title, parentId, component } = data
     const existing = await this.findOneByPath(path);
     if (existing) throw new ApiException(10400, '路径已存在');
     // 查询出父级
@@ -33,7 +34,8 @@ export class ResourcesService {
       type,
       icon,
       title,
-      parent
+      parent,
+      component
     });
     // 计算父级下存在的子级
     if (parent) {
@@ -56,13 +58,14 @@ export class ResourcesService {
     //   // where: { parentId: null },
     //   order: { id: 'DESC' },
     // });
-    return await this.resourcesRepository.find()
+    const data = await this.resourcesRepository.find()
+    return initTree(data)
   }
 
   async update(id: number, data: UpdateResourceDto): Promise<void> {
-    const { path, type, icon, title } = data
+    const { path, type, icon, title, component} = data
     await this.resourcesRepository.update(id, {
-      path, type, icon, title, 
+      path, type, icon, title, component,
     });
   }
 
@@ -79,4 +82,6 @@ export class ResourcesService {
     }
     return await this.resourcesRepository.softRemove(resources);
   }
+
+  
 }
