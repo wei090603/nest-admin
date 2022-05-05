@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2022-05-05 17:29:17
+Date: 2022-05-05 17:40:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,7 +37,7 @@ CREATE TABLE `resources` (
   UNIQUE KEY `IDX_634d60b1d936f681e80d1457c3` (`path`),
   KEY `FK_138ac50bdb6c58b1bb53ed3dd98` (`parent_id`),
   CONSTRAINT `FK_138ac50bdb6c58b1bb53ed3dd98` FOREIGN KEY (`parent_id`) REFERENCES `resources` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of resources
@@ -54,7 +54,7 @@ INSERT INTO `resources` VALUES ('9', '2022-04-24 14:53:59.526971', '2022-05-05 1
 INSERT INTO `resources` VALUES ('10', '2022-04-24 15:10:42.985621', '2022-05-05 17:11:22.000000', null, '分类列表', 'menu', '', 'category', '6', '0', '0', 'article/category', '0');
 INSERT INTO `resources` VALUES ('11', '2022-04-24 15:10:55.327911', '2022-05-05 17:11:31.000000', null, '标签列表', 'menu', '', 'tag', '6', '0', '0', 'article/tag', '0');
 INSERT INTO `resources` VALUES ('12', '2022-04-24 15:11:50.501756', '2022-05-05 17:11:44.000000', null, '文章列表', 'menu', '', 'articleList', '6', '0', '0', 'article/articleList', '0');
-INSERT INTO `resources` VALUES ('13', '2022-04-24 15:12:51.839167', '2022-05-05 17:01:57.000000', null, '资源列表', 'menu', '', 'resource', '7', '1', '0', 'permission/resource', '0');
+INSERT INTO `resources` VALUES ('13', '2022-04-24 15:12:51.839167', '2022-05-05 17:37:59.000000', null, '资源列表', 'menu', '', 'resource', '7', '4', '0', 'permission/resource', '0');
 INSERT INTO `resources` VALUES ('14', '2022-04-24 15:13:11.534105', '2022-05-05 17:12:23.000000', null, '角色列表', 'menu', '', 'roles', '7', '0', '0', 'permission/roles', '0');
 INSERT INTO `resources` VALUES ('15', '2022-04-24 15:13:27.133391', '2022-05-05 17:12:50.000000', null, '管理员列表', 'menu', '', 'manager', '7', '0', '0', 'permission/manager', '0');
 INSERT INTO `resources` VALUES ('16', '2022-04-24 15:14:08.854752', '2022-05-05 11:26:42.064790', null, '导航列表', 'menu', '', 'navigationList', '8', '0', '0', 'navigation', '0');
@@ -72,4 +72,7 @@ INSERT INTO `resources` VALUES ('27', '2022-04-28 10:40:06.825769', '2022-05-05 
 INSERT INTO `resources` VALUES ('28', '2022-04-28 10:40:27.330771', '2022-05-05 11:26:42.483266', null, '管理员修改', 'button', '', 'manager/patch', '15', '0', '0', '', '0');
 INSERT INTO `resources` VALUES ('29', '2022-04-28 10:41:00.002823', '2022-05-05 11:26:42.530151', null, '管理员删除', 'button', '', 'manager/delete', '15', '0', '0', '', '0');
 INSERT INTO `resources` VALUES ('30', '2022-04-28 10:48:13.245912', '2022-05-05 11:26:42.565182', null, '权限分配', 'button', '', 'roles/resources/patch', '14', '0', '0', '', '0');
-INSERT INTO `resources` VALUES ('31', '2022-05-05 17:01:56.940931', '2022-05-05 17:07:02.698816', null, '获取资源', 'button', '', 'get/resource', '13', '0', '0', '', '0');
+INSERT INTO `resources` VALUES ('31', '2022-05-05 17:01:56.940931', '2022-05-05 17:38:58.351586', null, '获取资源', 'button', '', 'resource/get', '13', '0', '0', '', '0');
+INSERT INTO `resources` VALUES ('32', '2022-05-05 17:36:48.820064', '2022-05-05 17:39:06.721405', null, '新增资源', 'button', '', 'resource/post', '13', '0', '0', '', '255');
+INSERT INTO `resources` VALUES ('33', '2022-05-05 17:37:34.063623', '2022-05-05 17:38:48.751041', null, '资源修改', 'button', '', 'resource/patch', '13', '0', '0', '', '255');
+INSERT INTO `resources` VALUES ('34', '2022-05-05 17:37:58.936418', '2022-05-05 17:38:43.069726', null, '资源删除', 'button', '', 'resource/delete', '13', '0', '0', '', '255');
