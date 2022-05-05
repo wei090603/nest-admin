@@ -24,7 +24,7 @@ export class ResourcesService {
    * @return {*}
    */
   async create(data: CreateResourceDto): Promise<void> {
-    const { path, type, icon, title, parentId, component } = data
+    const { path, type, icon, title, parentId, component, status, sort } = data
     const existing = await this.findOneByPath(path);
     if (existing) throw new ApiException(10400, '路径已存在');
     // 查询出父级
@@ -35,7 +35,9 @@ export class ResourcesService {
       icon,
       title,
       parent,
-      component
+      component,
+      status,
+      sort
     });
     // 计算父级下存在的子级
     if (parent) {
@@ -53,12 +55,11 @@ export class ResourcesService {
    * @return {*}
    */
   async findAll(): Promise<Resources[]> {
-    // return await this.resourcesRepository.find({
-    //   // relations: ['children'],
-    //   // where: { parentId: null },
-    //   order: { id: 'DESC' },
-    // });
-    const data = await this.resourcesRepository.find()
+    const data = await this.resourcesRepository.find({
+      order: {
+        sort: 'ASC'
+      }
+    })
     return initTree(data)
   }
 

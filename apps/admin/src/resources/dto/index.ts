@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, ValidateIf } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 enum type {
@@ -32,7 +32,21 @@ export class CreateResourceDto {
   @IsString({ message: '不是有效的数据' })
   @ValidateIf((obj, value) => obj.type === 'menu')
   readonly component: string;
+
+  @ApiProperty({
+    description: '排序',
+  })
+  @IsNumber({}, { message: '不是有效的数据' })
+  @ValidateIf((obj, value) => value)
+  readonly sort: number;
   
+  @ApiProperty({
+    description: '状态 false-隐藏 true-显示',
+    example: true
+  })
+  @IsOptional()
+  @IsBoolean({ message: '不是有效的数据' })
+  readonly status: boolean;
 }
 
 export class UpdateResourceDto extends PartialType(CreateResourceDto) {}

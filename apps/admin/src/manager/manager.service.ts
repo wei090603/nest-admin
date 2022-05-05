@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manager } from '@libs/db/entity/manager.entity';
-import { getManager, Like, Repository, TreeRepository } from 'typeorm';
+import { getManager, Like, Repository } from 'typeorm';
 import { hashSync } from 'bcryptjs';
 import { CreateManagerDto, FindManagerDto } from './dto';
 import { Roles } from '@libs/db/entity/roles.entity';
@@ -17,6 +17,8 @@ export class ManagerService {
     private readonly managerRepository: Repository<Manager>,
     @InjectRepository(Roles)
     private readonly rolesRepository: Repository<Roles>,
+    @InjectRepository(Resources)
+    private readonly resourcesRepository: Repository<Resources>,
   ) {}
 
   async findAll({ page = 1, limit = 10, ...params }: FindManagerDto) : Promise<PageResult<Manager>> {
@@ -79,16 +81,26 @@ export class ManagerService {
 
   async resources(roles: any[]) {
     const roleId: number[] = roles.map((item: any) => item.id); 
-    const data = await this.rolesRepository.createQueryBuilder('roles')
-    .leftJoinAndSelect('roles.resources', 'resources', "resources.type = 'menu'")
-    .select('roles.id')
-    .addSelect('resources')
-    .where('roles.id IN (:...ids)', { ids: roleId })
-    .orderBy('resources.id', 'DESC')
-    .getMany()
-    const resourcesList = data.map((item: Roles) => item.resources);
-    // const resources = resourcesList.reduce((a: any[], b: any) => a.concat(b) ); // 二维数组转一维数组
-    const newArr = resourcesList.flat()
-    return initTree(newArr)
+    if (roleId.includes(1)) { // 超级管理员
+      const data = await this.resourcesRepository.find({
+        where: { type: 'menu' },
+        order: {
+          sort: 'ASC'
+        }
+      })
+      return initTree(data)
+    } else {
+      const data = await this.rolesRepository.createQueryBuilder('roles')
+      .leftJoinAndSelect('roles.resources', 'resources', "resources.type = 'menu'")
+      .select('roles.id')
+      .addSelect('resources')
+      .where('roles.id IN (:...ids)', { ids: roleId })
+      .orderBy('resources.id', 'DESC')
+      .getMany()
+      const resourcesList = data.map((item: Roles) => item.resources);
+      // const resources = resourcesList.reduce((a: any[], b: any) => a.concat(b) ); // 二维数组转一维数组
+      const newArr = resourcesList.flat()
+      return initTree(newArr)
+    }
   }
 }

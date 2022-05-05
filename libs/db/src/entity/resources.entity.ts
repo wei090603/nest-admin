@@ -51,8 +51,8 @@ export class Resources extends Base {
   @Column({
     type: 'boolean',
     name: 'status',
-    comment: '是否显示 0-不显示 1-显示',
-    default: true,
+    comment: '是否显示 0-显示 1-不显示',
+    default: false,
   })
   public status: boolean;
 
@@ -63,6 +63,13 @@ export class Resources extends Base {
     comment: '子级数量'
   })
   public level: number;
+
+  @Column('int', {
+    name: 'sort',
+    default: 255,
+    comment: '排序'
+  })
+  public sort: number;
 
   @ManyToOne(() => Resources, type => type.children)
   @JoinColumn({name: 'parent_id'})
