@@ -42,7 +42,7 @@ export class CommonManager {
     required: false
   })
   @IsString({ message: '不是有效的数据' })
-  @IsMobilePhone('zh-CN', {}, { message: '手机号错误' })
+  @IsMobilePhone('zh-CN', {}, { each: true, message: '手机格式错误' })
   @IsOptional()
   @ValidateIf((obj, value) => value)
   readonly phone: string;
