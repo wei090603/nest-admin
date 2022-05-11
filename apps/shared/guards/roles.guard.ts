@@ -28,12 +28,10 @@ export class RolesGuard implements CanActivate {
     // 如果是超级管理员
     if(root) return true
     // 根据地址判断权限
-    // const url: string = request.route.path.replace(/\/api\/admin\//, ''); // 请求地址
-    const url = request.route.path
+    const url = request.route.path.substring(1);
     const method: string = request.method.toLowerCase(); // 请求方式
 
-    const resourcesList = user.roles.map((item: Roles) => item.resources);
-    const roleAPi = resourcesList.reduce((a: string | any[], b: any) => a.concat(b) );
+    const roleAPi = user.roles.map((item: Roles) => item.resources).flat();
     const result = roleAPi.some((item: { path: string }) => item.path === `${url}/${method}`)
 
     if (result) {

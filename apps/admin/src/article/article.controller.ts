@@ -1,20 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { Manager } from '@libs/db/entity/manager.entity';
 import { ArticleService } from './article.service';
 import { CreateArticleDto, FindArticleDto, PageArticleList } from './type';
+import { RolesGuard } from 'apps/shared/guards/roles.guard';
 
 @ApiTags('文章管理')
 @ApiBearerAuth()
+@UseGuards(RolesGuard)
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-
-  @Post()
-  @ApiOperation({ summary: '添加文章' })
-  async create(@Body() data: CreateArticleDto) {
-    return this.articleService.create(data);
-  }
 
   @Get()
   @ApiOkResponse({ type: [PageArticleList] })

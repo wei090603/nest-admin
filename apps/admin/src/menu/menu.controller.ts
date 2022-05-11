@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { RolesGuard } from 'apps/shared/guards/roles.guard';
 import { CreateMenuDto, FindMenuDto, MenuInfo } from './dto';
 import { MenuService } from './menu.service';
 
 @ApiTags('菜单管理')
 @ApiBearerAuth()
+@UseGuards(RolesGuard)
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}

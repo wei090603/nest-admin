@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'apps/shared/guards/roles.guard';
 import { FindTagDto, TagInfo } from './dto';
 import { PageTagList } from './res';
 import { TagService } from './tag.service';
 
 @ApiTags('标签管理')
 @ApiBearerAuth()
+@UseGuards(RolesGuard)
 @Controller('tag')
 export class TagController {
   constructor(private readonly tagService: TagService) {}

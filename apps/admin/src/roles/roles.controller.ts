@@ -8,7 +8,7 @@ import { RolesService } from './roles.service';
 @ApiTags('角色管理')
 @ApiBearerAuth()
 @Controller('roles')
-// @UseGuards(RolesGuard)
+@UseGuards(RolesGuard)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
