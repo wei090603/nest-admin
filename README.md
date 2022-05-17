@@ -72,6 +72,7 @@ $ nest g lib common
 # 一次生成模块
 
 \$ nest g res -p admin 模块名
+$ --no-spec 不添加测试文件
 
 # 项目 依赖升级
 
