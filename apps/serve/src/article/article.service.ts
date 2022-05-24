@@ -97,11 +97,11 @@ export class ArticleService {
     id !== 23 ? sql.orderBy('article.likes', 'DESC'): sql.orderBy('article.comments', 'DESC')
 
     return await sql
-    .leftJoinAndSelect('article.author', 'author') // 注意这里
+    .leftJoinAndSelect('article.author', 'author') 
     .leftJoinAndSelect('article.category', 'category')
-    .leftJoinAndSelect('article.tag', 'tag') // 注意这里
+    .leftJoinAndSelect('article.tag', 'tag')
     .select('article')
-    .addSelect('author.nickName') // 和这里
+    .addSelect('author.nickName')
     .addSelect('category.id')
     .addSelect('category.title')
     .where({ category: In(ids) })
