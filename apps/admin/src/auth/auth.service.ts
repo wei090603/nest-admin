@@ -28,7 +28,6 @@ export class AuthService {
     return { token: this.jwtService.sign(payload) };
   }
 
-
   public async validateUser( account: string, password: string ): Promise<Manager> {
     const user = await getManager().createQueryBuilder(Manager, "manager")
       .select(['manager.id', 'id'])
